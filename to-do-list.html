@@ -22,7 +22,11 @@
     </header>
     <main>
         <h1>Class</h1>
-        <ul onclick="check_boxes()">
+        <ul onclick="check_boxes()" id="todo-list">
+            <li class="undone">
+                <input type="checkbox" name="task0" id="task0">
+                <label for="task0">Task0</label>
+            </li>
             <li class="undone">
                 <input type="checkbox" name="task1" id="task1">
                 <label for="task1">Task1</label>
@@ -31,13 +35,9 @@
                 <input type="checkbox" name="task2" id="task2">
                 <label for="task2">Task2</label>
             </li>
-            <li class="undone">
-                <input type="checkbox" name="task3" id="task3">
-                <label for="task3">Task3</label>
-            </li>
         </ul>
 
-        <div>Botão de adicionar</div>
+        <div id="add">+</div>
         <script src="scripts/todolist.js"></script>
     </main>
 </body>

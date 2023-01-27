@@ -1,11 +1,11 @@
 @charset "UTF-8";
 
 :root{
-    --cor001: #a3ceff;
-    --cor002: #93b9e6;
-    --cor003: #83a5cc;
-    --cor004: #0077ff;
-    --cor005: #2b5380;
+    --cor001: #A3CEFF;
+    --cor002: #99C9FF;
+    --cor003: #9CBEE8;
+    --cor004: #5187C4;
+    --cor005: #386CA8;
 
 }
 ::-webkit-scrollbar{
@@ -38,8 +38,15 @@ header > menu > ul > li {
     height: 21px;
     margin: 0px 5px;
     border-radius: 21px;
-    background-color: var(--cor002);
+    background-color: var(--cor001);
     display: inline-block;
+    color: #4a4a4a;
+    text-shadow: 0px 0px 1px rgba(0, 0, 0, 0.34);
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.41);
+}
+
+main > h1{
+    margin: 10px;
 }
 
 main > ul > li {
@@ -48,12 +55,12 @@ main > ul > li {
     border-radius: 5px;
     margin: 5px;
     padding: 5px 5px;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.426);
 }
 
 main > ul > label {
     margin: 0px;
 }
-
 
 main > ul > li.done{
     background-color: var(--cor003);
@@ -68,3 +75,26 @@ main > ul > li.undone{
 main > ul > li.undone label{
     text-decoration: none;
 }
+main > div#add{
+    position: fixed;
+    top: 92%;
+    left: 88%;
+    margin-right: 10px;
+    padding: 10px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    font-size: 3em;
+    color: white;
+    border-radius: 30px;
+    background-color: var(--cor005);
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.456);
+}
+main > div#add.clicked{
+    background-color: var(--cor004);
+}
+main > div#add:hover{
+    cursor: pointer;
+}
+
