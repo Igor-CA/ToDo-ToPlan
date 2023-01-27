@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo ToPlan</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="estilos/style.css">
+</head>
+<body>
+    <header>
+        <menu>
+            <ul>
+                <li>Today</li>
+                <li>Project 1</li>
+                <li>Omni directional car</li>
+                <li>Omni directional skateboard</li>
+                <li>POV Globe</li>
+            </ul>
+        </menu>
+    </header>
+    <main>
+        <h1>Class</h1>
+        <ul onclick="check_boxes()">
+            <li class="undone">
+                <input type="checkbox" name="task1" id="task1">
+                <label for="task1">Task1</label>
+            </li>
+            <li class="undone">
+                <input type="checkbox" name="task2" id="task2">
+                <label for="task2">Task2</label>
+            </li>
+            <li class="undone">
+                <input type="checkbox" name="task3" id="task3">
+                <label for="task3">Task3</label>
+            </li>
+        </ul>
+
+        <div>Botão de adicionar</div>
+        <script src="scripts/todolist.js"></script>
+    </main>
+</body>
+</html>
