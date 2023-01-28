@@ -79,8 +79,8 @@ main > ul > li.undone label{
 
 main > input#add{
     position: fixed;
-    top: 90%;
-    left: 88%;
+    bottom: 10px;
+    right: 10px;
     border: none;
     border-radius: 25px;
     width: 50px;

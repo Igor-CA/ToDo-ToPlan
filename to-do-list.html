@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 minimum-scale=1">
     <title>ToDo ToPlan</title>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="estilos/style.css">
@@ -14,14 +14,22 @@
             <ul>
                 <li>Today</li>
                 <li>Project 1</li>
-                <li>Omni directional car</li>
-                <li>Omni directional skateboard</li>
-                <li>POV Globe</li>
+                <li>Project 2</li>
+                <li>project 3</li>
+                <li>project 4</li>
+                <li>project 5</li>
+                <li>project 6</li>
+                <li>project 7</li>
+                <li>project 8</li>
+                <li>project 9</li>
+                <li>project 10</li>
+                <li>project 11</li>
+                <li>project 12</li>
             </ul>
         </menu>
     </header>
     <main>
-        <h1>Class</h1>
+        <h1>Category</h1>
         <ul onclick="check_boxes()" id="todo-list">
             <li class="undone">
                 <input type="checkbox" name="task0" id="task0">
@@ -37,9 +45,35 @@
             </li>
         </ul>
         
+
         <input id="add" type="button" value="+">
-        <label for="test">Test:</label>
-        <input type="text" name="test" id="test">
+        
+        <section id="add_task_screen">
+            
+            <input type="text" name="add_task" id="add_task" placeholder="Input new task here">
+            <label for="add_text"></label><br>
+            
+            <label for="task_repetition">Repetition:</label>
+            <select name="task_repetition" id="task_repetition">
+                <option value="">Once</option>
+                <option value="">Continuous</option>
+                <option value="">Hourly</option>
+                <option value="">Daily</option>
+                <option value="">Weekly</option>
+                <option value="">Monthly</option>
+                <option value="">Yearly</option>
+            </select><br>
+            
+            <label for="task_category">Category:</label>
+            <select name="task_category" id="task_category">
+                <option value="">Today</option>
+                <option value="">Project 1</option>
+                <option value="">+ Create New</option>
+            </select>
+
+            <input type="button" value="Sent">
+        </section>
+        
         <script src="scripts/todolist.js"></script>
     </main>
 </body>
