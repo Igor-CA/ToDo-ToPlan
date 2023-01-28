@@ -75,26 +75,27 @@ main > ul > li.undone{
 main > ul > li.undone label{
     text-decoration: none;
 }
-main > div#add{
+
+
+main > input#add{
     position: fixed;
-    top: 92%;
+    top: 90%;
     left: 88%;
-    margin-right: 10px;
+    border: none;
+    border-radius: 25px;
+    width: 50px;
+    height: 50px;
     padding: 10px;
-    width: 30px;
-    height: 30px;
-    text-align: center;
     line-height: 30px;
     font-size: 3em;
     color: white;
-    border-radius: 30px;
     background-color: var(--cor005);
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.456);
+    transition: background-color 0.2s;
 }
-main > div#add.clicked{
-    background-color: var(--cor004);
-}
-main > div#add:hover{
+main > input#add:hover{
     cursor: pointer;
 }
-
+main > input#add:active{
+    background-color: var(--cor004);
+}
