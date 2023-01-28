@@ -1,2 +1,2 @@
-# ToDo-ToPlan
- App for planning and brainstorm projects ideas
+# ToDo-ToPlan project
+ Idea of App/Website to brainstorm, plan and organize projects ideas while learning HTML, CSS, JS and wharever more is needed 
