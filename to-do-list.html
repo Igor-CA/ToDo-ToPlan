@@ -48,11 +48,13 @@
 
         <input id="add" type="button" value="+">
         
-        <section id="add_task_screen">
+        <section id="add_task_screen" class="unvisible">
             
-            <input type="text" name="add_task" id="add_task" placeholder="Input new task here">
+            <input type="text" name="add_task" id="add_task" placeholder="Input new task here" autocomplete="off" oninput="check_save()">
             <label for="add_text"></label><br>
             
+            <!--TODO each task should have a category, a repetition and a date -->
+            <!--
             <label for="task_repetition">Repetition:</label>
             <select name="task_repetition" id="task_repetition">
                 <option value="">Once</option>
@@ -70,8 +72,8 @@
                 <option value="">Project 1</option>
                 <option value="">+ Create New</option>
             </select>
-
-            <input type="button" value="Sent">
+            -->
+            <input type="button" value="Add" onclick="add()" id="save_task_button">
         </section>
         
         <script src="scripts/todolist.js"></script>
