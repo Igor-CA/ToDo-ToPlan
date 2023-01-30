@@ -11,6 +11,7 @@
 <body>
     <header>
         <menu>
+            <!--TODO: Make categorys function-->
             <ul>
                 <li>Today</li>
                 <li>Project 1</li>
@@ -30,7 +31,8 @@
     </header>
     <main>
         <h1>Category</h1>
-        <ul onclick="check_boxes()" id="todo-list">
+        <!--TODO: Make done tasks show at bottom-->
+        <ul onclick="check_tasks()" id="todo-list">
             <li class="undone">
                 <input type="checkbox" name="task0" id="task0">
                 <label for="task0">Task0</label>
@@ -48,9 +50,8 @@
 
         <input id="add" type="button" value="+">
         
-        <section id="add_task_screen" class="unvisible">
-            
-            <input type="text" name="add_task" id="add_task" placeholder="Input new task here" autocomplete="off" oninput="check_save()">
+        <section id="add_task_screen" class="unvisible">     
+            <input type="text" name="add_task" id="add_task" placeholder="Input new task here" autocomplete="off">
             <label for="add_text"></label><br>
             
             <!--TODO each task should have a category, a repetition and a date -->
@@ -73,7 +74,7 @@
                 <option value="">+ Create New</option>
             </select>
             -->
-            <input type="button" value="Add" onclick="add()" id="save_task_button">
+            <input type="button" value="Add" onclick="add_new_task()" id="save_task_button">
         </section>
         
         <script src="scripts/todolist.js"></script>
