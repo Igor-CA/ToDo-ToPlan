@@ -50,7 +50,7 @@ header > menu > ul > li {
     height: 21px;
     margin: 0px 5px;
     border-radius: 21px;
-    min-width: 50px1
+    min-width: 50px;
     text-align: center;
     background-color: var(--cor001);
     color: var(--cor005);
