@@ -3,8 +3,20 @@ let screen = document.getElementById('add_task_screen')
 
 add_btn.addEventListener("click", show_add_screen)
 
+let categorys = document.querySelectorAll('#categorys>li')
+for(let index=0; index<categorys.length; index++){
+    categorys[index].addEventListener('click', () => { select_category(index) });
+}
+
+function select_category(value){
+    for(let index=0; index<categorys.length; index++){
+        categorys[index].classList.remove('selected')
+    }
+    categorys[value].classList = 'selected'
+}
+
 function check_tasks(){
-    let tasks_check_boxes = document.querySelectorAll("main > ul > li > input[type=checkbox]")
+    let tasks_check_boxes = document.querySelectorAll("#todo-list > li > input[type=checkbox]")
     let task_list = document.querySelectorAll("main > ul > li")
     
     for(let element in tasks_check_boxes){
@@ -13,6 +25,22 @@ function check_tasks(){
         }
         else{task_list
             task_list[element].classList = 'undone'
+        }
+    }
+    order_tasks()
+}
+
+function order_tasks(){
+    to_do_list = document.querySelector("#todo-list")
+    tasks_list = document.querySelectorAll("#todo-list>li")
+    for(task in tasks_list){
+        if(tasks_list[task].className == 'undone'){
+            to_do_list.appendChild(tasks_list[task])
+        }
+    }
+    for(task in tasks_list){
+        if(tasks_list[task].className == 'done'){
+            to_do_list.appendChild(tasks_list[task])
         }
     }
 }
@@ -47,6 +75,7 @@ function add_new_task(){
 
         window.scrollTo(0, document.body.scrollHeight);
         task_name_input.value = ''
+        order_tasks()
     }
     else{
         task_name_input.placeholder = "Add tesk here"

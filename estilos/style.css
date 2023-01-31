@@ -57,6 +57,11 @@ header > menu > ul > li {
     box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.41);
 }
 
+header > menu > ul > li.selected{
+    background-color: var(--cor005);
+    color: white;
+}
+
 main > h1{
     margin: 10px;
 }
