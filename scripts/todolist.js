@@ -52,6 +52,7 @@ function show_add_screen(){
     var task_name_input = document.getElementById('add_task')
     task_name_input.value = ''
     task_name_input.focus()
+    reset_date()
 }
 
 function close_add_screen(){
