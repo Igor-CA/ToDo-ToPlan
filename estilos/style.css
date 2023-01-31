@@ -1,11 +1,11 @@
 @charset "UTF-8";
 
 :root{
-    --cor001: #A3CEFF;
-    --cor002: #99C9FF;
-    --cor003: #9CBEE8;
-    --cor004: #5187C4;
-    --cor005: #386CA8;
+    --cor001: #B9E1FF;
+    --cor002: #81C8FF;
+    --cor003: #67A0CC;
+    --cor004: #40647F;
+    --cor005: #17527F;
 
 }
 ::-webkit-scrollbar{
@@ -23,7 +23,7 @@ body, html{
 }
 
 body{
-    background-color: white;
+    background-color: var(--cor005);
 }
 
 body.disabled:before {
@@ -40,7 +40,7 @@ body.disabled:before {
 
 header > menu > ul{
     padding: 10px;
-    background-color: white;
+    background-color: var(--cor005);
     text-decoration: none;
     white-space: nowrap;
     overflow-x: auto;
@@ -50,9 +50,12 @@ header > menu > ul > li {
     height: 21px;
     margin: 0px 5px;
     border-radius: 21px;
+    min-width: 50px1
+    text-align: center;
     background-color: var(--cor001);
+    color: var(--cor005);
+    font-weight: bold;
     display: inline-block;
-    color: #4a4a4a;
     text-shadow: 0px 0px 1px rgba(0, 0, 0, 0.34);
     box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.41);
 }
@@ -64,6 +67,8 @@ header > menu > ul > li.selected{
 
 main > h1{
     margin: 10px;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.414);
 }
 
 main > ul > li {
@@ -72,6 +77,8 @@ main > ul > li {
     border-radius: 5px;
     margin: 5px;
     padding: 5px 5px;
+    color: var(--cor005);
+    font-weight: bold;
     box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.426);
 }
 
@@ -105,8 +112,8 @@ main > input#add{
     padding: 10px;
     line-height: 30px;
     font-size: 3em;
-    color: white;
-    background-color: var(--cor005);
+    color: var(--cor005);
+    background-color: var(--cor001);
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.456);
     transition: background-color 0.2s;
 }
@@ -114,7 +121,7 @@ main > input#add:hover{
     cursor: pointer;
 }
 main > input#add:active{
-    background-color: var(--cor004);
+    background-color: var(--cor002);
 }
 
 
@@ -136,6 +143,7 @@ main > section#add_task_screen > input[type='text']{
     width: 300px;
     height: 40px;
     margin: auto;
+    color: var(--cor005);
     margin-top: 15px;
     border-radius: 10px;
     border: none;
@@ -148,16 +156,18 @@ main > section#add_task_screen > input[type='text']{
 main >section#add_task_screen > input[type ='date'], 
 main >section#add_task_screen > select{
     margin-left: 15px; 
+    color: var(--cor005);
     display: inline-block;
     background-color: var(--cor001);
     border: none;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid var(--cor005);
     height: 20px;
     width: 280px;
     outline: none;
 }
 
 main >section#add_task_screen > label{
+    color: var(--cor005);
     margin-left: 15px;
     margin-top: 10px;
     display: block;
@@ -169,26 +179,19 @@ main >section#add_task_screen > button.finish{
     margin-top: 10px;
     margin-left: 15px;
     width: 150px;
+    color: var(--cor005);
     background-color: var(--cor001);
     cursor: pointer;
     box-sizing: border-box;
     border: none;
     outline: none;
 }
-main >section#add_task_screen > button#cancel_new_task_button > i{
-    color: red;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.33);
-}
-main >section#add_task_screen > button#save_new_task_button > i{
-    color: green;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.33);
-
-}
 main >section#add_task_screen > button#reset_date{
     margin-left: 10px;
     padding: 0px;
     font-size: 20px;
     background-color: var(--cor001);
+    color: var(--cor005);
     border: none;
     cursor: pointer;
 }
