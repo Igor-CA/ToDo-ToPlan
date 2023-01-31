@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0 minimum-scale=1">
     <title>ToDo ToPlan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="estilos/style.css">
 </head>
@@ -16,16 +17,16 @@
                 <li>Today</li>
                 <li>Project 1</li>
                 <li>Project 2</li>
-                <li>project 3</li>
-                <li>project 4</li>
-                <li>project 5</li>
-                <li>project 6</li>
-                <li>project 7</li>
-                <li>project 8</li>
-                <li>project 9</li>
-                <li>project 10</li>
-                <li>project 11</li>
-                <li>project 12</li>
+                <li>Project 3</li>
+                <li>Project 4</li>
+                <li>Project 5</li>
+                <li>Project 6</li>
+                <li>Project 7</li>
+                <li>Project 8</li>
+                <li>Project 9</li>
+                <li>Project 10</li>
+                <li>Project 11</li>
+                <li>Project 12</li>
             </ul>
         </menu>
     </header>
@@ -51,20 +52,26 @@
         
         <section id="add_task_screen" class="unvisible">     
             <input type="text" name="add_task" id="add_task" placeholder="Input new task here" autocomplete="off">
-            <label for="add_text"></label><br>
+            <label for="add_text"></label>
             
             <!--TODO each task should have a category, a repetition and a date -->
-            <!--
+            <label for="due_date">Due date:</label>
+            <input type="date" name="due_date" id="due_date" defaultValue={currentDate}>
+            <button id="reset_date" onclick="reset_date()">
+                <i class="fa fa-close"></i>
+            </button>
+            
+
             <label for="task_repetition">Repetition:</label>
             <select name="task_repetition" id="task_repetition">
-                <option value="">Once</option>
-                <option value="">Continuous</option>
-                <option value="">Hourly</option>
-                <option value="">Daily</option>
-                <option value="">Weekly</option>
-                <option value="">Monthly</option>
-                <option value="">Yearly</option>
-            </select><br>
+                <option value="1">Once</option>
+                <option value="2">Continuous</option>
+                <option value="3">Hourly</option>
+                <option value="4">Daily</option>
+                <option value="5">Weekly</option>
+                <option value="6">Monthly</option>
+                <option value="7">Yearly</option>
+            </select>
             
             <label for="task_category">Category:</label>
             <select name="task_category" id="task_category">
@@ -72,8 +79,9 @@
                 <option value="">Project 1</option>
                 <option value="">+ Create New</option>
             </select>
-            -->
-            <input type="button" value="Add" onclick="add_new_task()" id="save_task_button">
+
+            <button id="cancel_new_task_button" class="finish" onclick="close_add_screen()">Cancel <i class="fa fa-close"></i> </button>
+            <button id="save_new_task_button" class="finish" onclick="add_new_task()">Add<i class="fa fa-check"></i></button>
         </section>
         
         <script src="scripts/todolist.js"></script>

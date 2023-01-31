@@ -13,6 +13,7 @@ function select_category(value){
         categorys[index].classList.remove('selected')
     }
     categorys[value].classList = 'selected'
+    document.querySelector('main>h1').innerHTML = categorys[value].textContent
 }
 
 function check_tasks(){
@@ -49,9 +50,18 @@ function show_add_screen(){
     document.body.classList.add('disabled')
     screen.classList.remove('unvisible')
     var task_name_input = document.getElementById('add_task')
+    task_name_input.value = ''
     task_name_input.focus()
+}
 
+function close_add_screen(){
+    document.body.classList.remove('disabled')
+    screen.classList = 'unvisible'
+}
 
+function reset_date(){
+    let date_input = document.getElementById('due_date')
+    date_input.value =  ''
 }
 
 function add_new_task(){
