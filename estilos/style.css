@@ -134,11 +134,10 @@ main > section#add_task_screen{
     width: 350px;
     height: 280px;
     border-radius: 10px;
-    overflow: hidden;
     background-color: var(--cor001);
     transform: translate(-50%, -50%);
 }
-main > section#add_task_screen > input[type='text']{
+main > section#add_task_screen > input#new_task_name{
     display: block;
     width: 300px;
     height: 40px;
@@ -154,7 +153,8 @@ main > section#add_task_screen > input[type='text']{
 }
 
 main >section#add_task_screen > input[type ='date'], 
-main >section#add_task_screen > select{
+main >section#add_task_screen > select,
+main >section#add_task_screen > input#category_input{
     margin-left: 15px; 
     color: var(--cor005);
     display: inline-block;
