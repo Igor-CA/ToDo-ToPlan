@@ -4,72 +4,23 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilos/style.css">
     <link rel="stylesheet" href="estilos/brainstorm-style.css">
     <title>Brainstorm</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/Draggable.min.js"></script>
+
 </head>
 <body>
     <div id="workspace">
         <div class="block" id="square" onmousedown="this.classList.add('active')" onmouseup="this.classList.remove('active')">
+            Vermelha
         </div>
         <div class="block" id="square2" onmousedown="this.classList.add('active')" onmouseup="this.classList.remove('active')">
+            Verde
         </div>
     </div>
-    
-    
-    <script>
-        var scale = 1,
-        panning = false, 
-        pointX = 0,
-        pointY = 0,
-        start = { x:0, y:0 },
-        zoom = document.getElementById('workspace');
-
-        function setTransform(){
-            zoom.style.transform = `translate(${pointX}px,  ${pointY}px) scale(${scale})`
-        }
-
-        zoom.onmousedown = function(e){
-            e.preventDefault()
-            start = {x: e.clientX - pointX, y: e.clientY - pointY}
-            panning = true
-        }
-
-        zoom.onmouseup = function(e){
-            panning = false
-        }
-
-        zoom.onmousemove = function(e){
-            e.preventDefault()
-            if(!panning){
-                return
-            }
-
-            pointX = (e.clientX - start.x)
-            pointY = (e.clientY - start.y)
-            setTransform()
-        }
-
-        zoom.onwheel = function(e){
-            e.preventDefault()
-            var xs = (e.clientX - pointX)/scale
-            var ys = (e.clientY - pointY)/scale
-            console.log(xs)
-
-            var delta = (e.wheelDelta ? e.wheelDelta : -e.wheelDelta)
-
-            if(delta>0){
-                (scale *= 1.2)
-            } else {(scale /= 1.2)} 
-
-            pointX = e.clientX -  xs*scale
-            pointY = e.clientY -  ys*scale
-            
-            setTransform()
-        }
-
-
-    </script>
-    
+    <input id="add" type="button" value="+">
     <script src="scripts/brainstorm.js"></script>
 
 </body>

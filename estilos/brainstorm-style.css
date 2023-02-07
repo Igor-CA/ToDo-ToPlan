@@ -11,20 +11,14 @@ body, html{
     width: 100vw;
 }
 
-.block{
-    position: absolute;
-    top: 40px;
-    left: 40px;
-    width: 80px;
-    height: 80px;
-    transform: translate(-50%, -50%);
+body{
+    background-color: white;
 }
 
-#workspace{
-    border: 5px solid black;
-    width: 100vw;
-    height: 100vh;
-    box-sizing: border-box;
+
+.block{
+    width: 80px;
+    height: 80px;
 }
 
 #square{
