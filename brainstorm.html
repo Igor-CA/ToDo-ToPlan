@@ -13,10 +13,17 @@
 </head>
 <body>
     <div id="workspace">
-        <div class="block" id="square" onmousedown="this.classList.add('active')" onmouseup="this.classList.remove('active')">
-            Vermelha
+        <div class="block" id="square">
+            <div class="diagonalResize bottomLeft"></div>
+            <div class="diagonalResize bottomRight"></div>
+            <div class="diagonalResize topLeft"></div>
+            <div class="diagonalResize topRight"></div>
+            <div class="right"></div>
+            <div class="left"></div>
+            <div class="top"></div>
+            <div class="botton"></div>
         </div>
-        <div class="block" id="square2" onmousedown="this.classList.add('active')" onmouseup="this.classList.remove('active')">
+        <div class="block" id="square2">
             Verde
         </div>
     </div>

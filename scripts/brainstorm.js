@@ -1,18 +1,7 @@
 let x = 0
 let y = 0
-//document.addEventListener('mousemove',getMouseCoords)
 const zoomElement = document.getElementById('workspace')
-/*
-let zoom = 1 
-document.addEventListener('wheel', function(e){
-    if(e.deltaY > 0){ 
-        zoomElement.style.transform = `scale(${(zoom += 0.05)})`
-    } else{
-        zoomElement.style.transform = `scale(${(zoom -= 0.05)})`
-    }
-    console.log(zoom)
-})
-*/
+
 
 var scale = 1,
 panning = false,
@@ -21,18 +10,108 @@ pointX = 0,
 pointY = 0,
 start = { x:0, y:0 },
 zoom = document.getElementById('workspace');
+box = document.getElementById('square')
 
-Draggable.create(".block",{
-    type:"x,y",
-    onDrag:function()
-    {
-    }
+draggableBox = new Draggable(box,{
+    type:"x,y"
 });
+
+var rightBox = document.getElementsByClassName('right')
+var leftBox = document.getElementsByClassName('left')
+var bottonBox = document.getElementsByClassName('botton');
+var topBox = document.getElementsByClassName('top')
+
+let rightLastX = 0;
+let rightDraggable = new Draggable(rightBox, {
+    trigger:".topRight, .bottomRight",
+    type:"x,y",
+    onDrag: updateRight,
+    onPress: function(){
+        rightLastX = this.x
+        draggableBox.disable()
+    },
+    onRelease: function(){
+        draggableBox.enable()
+    }
+})
+
+function updateRight(){
+    var diffX = this.x - rightLastX
+    TweenMax.set(box, { width: "+=" + diffX })
+    rightLastX = this.x
+}
+
+let topLastY = 0;
+let topDraggable = new Draggable(topBox, {
+    trigger:".topRight, .topLeft",
+    type:"x,y",
+    onDrag: updateTop,
+    onPress: function(){
+        topLastY = this.Y
+        draggableBox.disable()
+    },
+    onRelease: function(){
+        draggableBox.enable()
+    }
+})
+
+function updateTop(){
+    var diffY = this.y - topLastY
+    TweenMax.set(box, { height: "-=" + diffY ,y: "+=" + diffY })
+    topLastY = this.y
+}
+
+let leftLastX = 0;
+let leftDraggable = new Draggable(leftBox, {
+    trigger:".topLeft, .bottomLeft",
+    type:"x,y",
+    onDrag: updateLeft,
+    onPress: function(){
+        leftLastX = this.x
+        draggableBox.disable()
+    },
+    onRelease: function(){
+        draggableBox.enable()
+    }
+})
+
+function updateLeft(){
+    var diffX = this.x - leftLastX
+    TweenMax.set(box, { width: "-=" + diffX, x: "+=" + diffX })
+    leftLastX = this.x
+}
+
+let bottomLastY = 0;
+let bottomDraggable = new Draggable(bottonBox, {
+    trigger:".bottomRight, .bottomLeft",
+    type:"x,y",
+    onDrag: updateBottom,
+    onPress: function(){
+        bottomLastY = this.Y
+        draggableBox.disable()
+    },
+    onRelease: function(){
+        draggableBox.enable()
+    }
+})
+
+function updateBottom(){
+    var diffY = this.y - bottomLastY
+    TweenMax.set(box, { height: "+=" + diffY})
+    bottomLastY = this.y
+}
+
+
+
 
 
 function setTransform(){
     zoom.style.translate = `${pointX}px  ${pointY}px`
     zoom.style.transform = `matrix(${scale}, 0, 0, ${scale}, 0, 0)`
+    let stretch_buttons = document.getElementsByClassName('diagonalResize')
+    for(let i=0; i<stretch_buttons.length; i++){
+        stretch_buttons[i].style.transform = `matrix(${1/scale}, 0, 0, ${1/scale}, 0, 0)`
+    }
 }
 
 window.onmousedown = function(e){
@@ -57,7 +136,6 @@ window.onmousemove = function(e){
 }
 
 window.onwheel = function(e){
-    e.preventDefault()
     var xs = (e.clientX - pointX)/scale
     var ys = (e.clientY - pointY)/scale
 
@@ -73,22 +151,3 @@ window.onwheel = function(e){
     setTransform()
 }
 
-
-/*
-function getMouseCoords(event){
-    x = event.clientX
-    y = event.clientY
-    handleMovement()
-}
-
-function handleMovement() {
-    let square = document.querySelectorAll('.block')
-    for(let i=0; i<square.length; i++){
-        if(square[i].classList.contains('active')){
-            console.log(square[i].style.left)
-            square[i].style.transform = `translate(${pointX}px,  ${pointY}px) scale(${scale})`
-        }
-    }
-    
-}
-*/

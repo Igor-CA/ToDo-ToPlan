@@ -15,10 +15,10 @@ body{
     background-color: white;
 }
 
-
 .block{
     width: 80px;
     height: 80px;
+    position: absolute;
 }
 
 #square{
@@ -26,4 +26,46 @@ body{
 }
 #square2{
     background-color: green;
+}
+#workspace{
+    height: 10px;
+}
+
+.diagonalResize{
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    background-color: black;
+}
+
+.bottomLeft{
+    position: absolute;
+    cursor: nesw-resize;
+    bottom: 0;
+    left: 0;
+    translate: -50% 50%;
+}
+
+.bottomRight{
+    position: absolute;
+    cursor: nwse-resize;
+    bottom: 0;
+    right: 0;
+    translate: 50% 50%;
+}
+
+.topLeft{
+    position: absolute;
+    cursor: nwse-resize;
+    top: 0;
+    left: 0;
+    translate: -50% -50%;
+}
+
+.topRight{
+    position: absolute;
+    cursor: nesw-resize;
+    top: 0;
+    right: 0;
+    translate: 50% -50%;
 }
