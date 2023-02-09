@@ -16,8 +16,10 @@ body{
 }
 
 .block{
-    width: 80px;
-    height: 80px;
+    min-width: 60px;
+    min-height: 60px;
+    max-width: 800px;
+    max-height: 800px;
     position: absolute;
 }
 
@@ -26,46 +28,41 @@ body{
 }
 #square2{
     background-color: green;
+    left: 150px
 }
 #workspace{
     height: 10px;
 }
 
 .diagonalResize{
+    position: absolute;
     width: 20px;
     height: 20px;
     border-radius: 10px;
     background-color: black;
 }
 
-.bottomLeft{
-    position: absolute;
-    cursor: nesw-resize;
+.bottom.left{
     bottom: 0;
     left: 0;
     translate: -50% 50%;
 }
 
-.bottomRight{
-    position: absolute;
-    cursor: nwse-resize;
+.bottom.right{
     bottom: 0;
     right: 0;
     translate: 50% 50%;
 }
 
-.topLeft{
-    position: absolute;
-    cursor: nwse-resize;
+.top.left{
     top: 0;
     left: 0;
     translate: -50% -50%;
 }
 
-.topRight{
-    position: absolute;
-    cursor: nesw-resize;
+.top.right{
     top: 0;
     right: 0;
     translate: 50% -50%;
 }
+

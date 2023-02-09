@@ -1,7 +1,96 @@
-let x = 0
-let y = 0
-const zoomElement = document.getElementById('workspace')
+let note = document.querySelectorAll(".block");
 
+for(let i=0; i<note.length; i++){
+    let rightBox = document.getElementsByClassName('leftResize')[i]
+    let leftBox =  document.getElementsByClassName('rightResize')[i]
+    let bottomBox =  document.getElementsByClassName('topResize')[i]
+    let topBox =  document.getElementsByClassName('bottomResize')[i]
+
+    let rightTrigger = note[i].querySelectorAll('.right')
+    let leftTrigger = note[i].querySelectorAll('.left')
+    let topTrigger = note[i].querySelectorAll('.top')
+    let BottomTrigger = note[i].querySelectorAll('.bottom')
+
+    let draggableBox = new Draggable(note[i],{
+        type:"x,y"
+    });
+    let rightLastX = 0;
+    Draggable.create(rightBox, {  
+        trigger:rightTrigger,
+        type:"x,y",
+        onDrag: function(){
+            let diffX = this.x - rightLastX
+            gsap.set(note[i], { width: "+=" + diffX })
+            rightLastX = this.x
+        },
+        onPress: function(){
+            rightLastX = this.x
+            console.log(this.origX, this.origY);
+
+            draggableBox.disable()
+        },
+        onRelease: function(){
+            draggableBox.enable()
+        }
+    })
+
+
+    let topLastY = 0;
+    Draggable.create(topBox, {
+        trigger:topTrigger,
+        type:"x,y",
+        onDrag: function(){
+            var diffY = this.y - topLastY
+            TweenMax.set(note[i], { height: "-=" + diffY ,y: "+=" + diffY })
+            topLastY = this.y
+        },
+        onPress: function(){
+            topLastY = this.Y
+            draggableBox.disable()
+        },
+        onRelease: function(){
+            draggableBox.enable()
+        }
+    })
+
+
+    let leftLastX = 0;
+    Draggable.create(leftBox, {
+        trigger:leftTrigger,
+        type:"x,y",
+        onDrag: function(){
+            var diffX = this.x - leftLastX
+            TweenMax.set(note[i], { width: "-=" + diffX, x: "+=" + diffX })
+            leftLastX = this.x
+        },
+        onPress: function(){
+            leftLastX = this.x
+            draggableBox.disable()
+        },
+        onRelease: function(){
+            draggableBox.enable()
+        }
+    })
+
+
+    let bottomLastY = 0;
+    Draggable.create(bottomBox, {
+        trigger:BottomTrigger,
+        type:"x,y",
+        onDrag: function(){
+            var diffY = this.y - bottomLastY
+            TweenMax.set(note[i], { height: "+=" + diffY})
+            bottomLastY = this.y
+        },
+        onPress: function(){
+            bottomLastY = this.Y
+            draggableBox.disable()
+        },
+        onRelease: function(){
+            draggableBox.enable()
+        }
+    })
+}
 
 var scale = 1,
 panning = false,
@@ -10,100 +99,6 @@ pointX = 0,
 pointY = 0,
 start = { x:0, y:0 },
 zoom = document.getElementById('workspace');
-box = document.getElementById('square')
-
-draggableBox = new Draggable(box,{
-    type:"x,y"
-});
-
-var rightBox = document.getElementsByClassName('right')
-var leftBox = document.getElementsByClassName('left')
-var bottonBox = document.getElementsByClassName('botton');
-var topBox = document.getElementsByClassName('top')
-
-let rightLastX = 0;
-let rightDraggable = new Draggable(rightBox, {
-    trigger:".topRight, .bottomRight",
-    type:"x,y",
-    onDrag: updateRight,
-    onPress: function(){
-        rightLastX = this.x
-        draggableBox.disable()
-    },
-    onRelease: function(){
-        draggableBox.enable()
-    }
-})
-
-function updateRight(){
-    var diffX = this.x - rightLastX
-    TweenMax.set(box, { width: "+=" + diffX })
-    rightLastX = this.x
-}
-
-let topLastY = 0;
-let topDraggable = new Draggable(topBox, {
-    trigger:".topRight, .topLeft",
-    type:"x,y",
-    onDrag: updateTop,
-    onPress: function(){
-        topLastY = this.Y
-        draggableBox.disable()
-    },
-    onRelease: function(){
-        draggableBox.enable()
-    }
-})
-
-function updateTop(){
-    var diffY = this.y - topLastY
-    TweenMax.set(box, { height: "-=" + diffY ,y: "+=" + diffY })
-    topLastY = this.y
-}
-
-let leftLastX = 0;
-let leftDraggable = new Draggable(leftBox, {
-    trigger:".topLeft, .bottomLeft",
-    type:"x,y",
-    onDrag: updateLeft,
-    onPress: function(){
-        leftLastX = this.x
-        draggableBox.disable()
-    },
-    onRelease: function(){
-        draggableBox.enable()
-    }
-})
-
-function updateLeft(){
-    var diffX = this.x - leftLastX
-    TweenMax.set(box, { width: "-=" + diffX, x: "+=" + diffX })
-    leftLastX = this.x
-}
-
-let bottomLastY = 0;
-let bottomDraggable = new Draggable(bottonBox, {
-    trigger:".bottomRight, .bottomLeft",
-    type:"x,y",
-    onDrag: updateBottom,
-    onPress: function(){
-        bottomLastY = this.Y
-        draggableBox.disable()
-    },
-    onRelease: function(){
-        draggableBox.enable()
-    }
-})
-
-function updateBottom(){
-    var diffY = this.y - bottomLastY
-    TweenMax.set(box, { height: "+=" + diffY})
-    bottomLastY = this.y
-}
-
-
-
-
 
 function setTransform(){
     zoom.style.translate = `${pointX}px  ${pointY}px`
