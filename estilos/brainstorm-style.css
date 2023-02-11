@@ -14,12 +14,27 @@ body, html{
 body{
     background-color: white;
 }
-
+textarea{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 75%;
+    height: 75%;
+    text-align: center;
+    background-color: #ffffff00;
+    border: none;
+    resize: none;
+    translate: -50% -50%;
+}
+textarea:focus{
+    outline: none;
+}
 .block{
     min-width: 60px;
     min-height: 60px;
     max-width: 800px;
     max-height: 800px;
+    border: 1px solid black;
     position: absolute;
 }
 

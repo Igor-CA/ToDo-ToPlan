@@ -1,95 +1,114 @@
 let note = document.querySelectorAll(".block");
+function setNotesListener(){
+    for(let i=0; i<note.length; i++){
+        let rightBox = document.getElementsByClassName('leftResize')[i]
+        let leftBox =  document.getElementsByClassName('rightResize')[i]
+        let bottomBox =  document.getElementsByClassName('topResize')[i]
+        let topBox =  document.getElementsByClassName('bottomResize')[i]
 
-for(let i=0; i<note.length; i++){
-    let rightBox = document.getElementsByClassName('leftResize')[i]
-    let leftBox =  document.getElementsByClassName('rightResize')[i]
-    let bottomBox =  document.getElementsByClassName('topResize')[i]
-    let topBox =  document.getElementsByClassName('bottomResize')[i]
+        let rightTrigger = note[i].querySelectorAll('.right')
+        let leftTrigger = note[i].querySelectorAll('.left')
+        let topTrigger = note[i].querySelectorAll('.top')
+        let BottomTrigger = note[i].querySelectorAll('.bottom')
 
-    let rightTrigger = note[i].querySelectorAll('.right')
-    let leftTrigger = note[i].querySelectorAll('.left')
-    let topTrigger = note[i].querySelectorAll('.top')
-    let BottomTrigger = note[i].querySelectorAll('.bottom')
-
-    let draggableBox = new Draggable(note[i],{
-        type:"x,y"
-    });
-    let rightLastX = 0;
-    Draggable.create(rightBox, {  
-        trigger:rightTrigger,
-        type:"x,y",
-        onDrag: function(){
-            let diffX = this.x - rightLastX
-            gsap.set(note[i], { width: "+=" + diffX })
-            rightLastX = this.x
-        },
-        onPress: function(){
-            rightLastX = this.x
-            console.log(this.origX, this.origY);
-
-            draggableBox.disable()
-        },
-        onRelease: function(){
-            draggableBox.enable()
-        }
-    })
+        let draggableBox = new Draggable(note[i],{
+            type:"x,y"
+        });
+        let rightLastX = 0;
+        Draggable.create(rightBox, {  
+            trigger:rightTrigger,
+            type:"x,y",
+            onDrag: function(){
+                let diffX = this.x - rightLastX
+                gsap.set(note[i], { width: "+=" + diffX })
+                rightLastX = this.x
+            },
+            onPress: function(){
+                rightLastX = this.x
+                draggableBox.disable()
+            },
+            onRelease: function(){
+                draggableBox.enable()
+            }
+        })
 
 
-    let topLastY = 0;
-    Draggable.create(topBox, {
-        trigger:topTrigger,
-        type:"x,y",
-        onDrag: function(){
-            var diffY = this.y - topLastY
-            TweenMax.set(note[i], { height: "-=" + diffY ,y: "+=" + diffY })
-            topLastY = this.y
-        },
-        onPress: function(){
-            topLastY = this.Y
-            draggableBox.disable()
-        },
-        onRelease: function(){
-            draggableBox.enable()
-        }
-    })
+        let topLastY = 0;
+        Draggable.create(topBox, {
+            trigger:topTrigger,
+            type:"x,y",
+            onDrag: function(){
+                var diffY = this.y - topLastY
+                TweenMax.set(note[i], { height: "-=" + diffY ,y: "+=" + diffY })
+                topLastY = this.y
+            },
+            onPress: function(){
+                topLastY = this.Y
+                draggableBox.disable()
+            },
+            onRelease: function(){
+                draggableBox.enable()
+            }
+        })
 
 
-    let leftLastX = 0;
-    Draggable.create(leftBox, {
-        trigger:leftTrigger,
-        type:"x,y",
-        onDrag: function(){
-            var diffX = this.x - leftLastX
-            TweenMax.set(note[i], { width: "-=" + diffX, x: "+=" + diffX })
-            leftLastX = this.x
-        },
-        onPress: function(){
-            leftLastX = this.x
-            draggableBox.disable()
-        },
-        onRelease: function(){
-            draggableBox.enable()
-        }
-    })
+        let leftLastX = 0;
+        Draggable.create(leftBox, {
+            trigger:leftTrigger,
+            type:"x,y",
+            onDrag: function(){
+                var diffX = this.x - leftLastX
+                TweenMax.set(note[i], { width: "-=" + diffX, x: "+=" + diffX })
+                leftLastX = this.x
+            },
+            onPress: function(){
+                leftLastX = this.x
+                draggableBox.disable()
+            },
+            onRelease: function(){
+                draggableBox.enable()
+            }
+        })
 
 
-    let bottomLastY = 0;
-    Draggable.create(bottomBox, {
-        trigger:BottomTrigger,
-        type:"x,y",
-        onDrag: function(){
-            var diffY = this.y - bottomLastY
-            TweenMax.set(note[i], { height: "+=" + diffY})
-            bottomLastY = this.y
-        },
-        onPress: function(){
-            bottomLastY = this.Y
-            draggableBox.disable()
-        },
-        onRelease: function(){
-            draggableBox.enable()
-        }
-    })
+        let bottomLastY = 0;
+        Draggable.create(bottomBox, {
+            trigger:BottomTrigger,
+            type:"x,y",
+            onDrag: function(){
+                var diffY = this.y - bottomLastY
+                TweenMax.set(note[i], { height: "+=" + diffY})
+                bottomLastY = this.y
+            },
+            onPress: function(){
+                bottomLastY = this.Y
+                draggableBox.disable()
+            },
+            onRelease: function(){
+                draggableBox.enable()
+            }
+        })
+    }
+}
+setNotesListener()
+function addNote(){
+    let newNote = document.createElement('div')
+    let noteHTML = 
+        `<div class="diagonalResize bottom left"></div>
+        <div class="diagonalResize bottom right"></div>
+        <div class="diagonalResize top left"></div>
+        <div class="diagonalResize top right"></div>
+        <div class="leftResize"></div>
+        <div class="rightResize"></div>
+        <div class="topResize"></div>
+        <div class="bottomResize"></div>`
+    newNote.innerHTML = noteHTML
+    newNote.classList = 'block'
+    let workspace = document.getElementById("workspace")
+    workspace.appendChild(newNote)
+    note = document.querySelectorAll(".block");
+    setNotesListener()
+
 }
 
 var scale = 1,

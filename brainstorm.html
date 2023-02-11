@@ -14,6 +14,7 @@
 <body>
     <div id="workspace">
         <div class="block" id="square">
+            <textarea name="note" id="note1" cols="30" rows="10" onclick="this.focus()"></textarea>
             <div class="diagonalResize bottom left"></div>
             <div class="diagonalResize bottom right"></div>
             <div class="diagonalResize top left"></div>
@@ -24,6 +25,7 @@
             <div class="bottomResize"></div>
         </div>
         <div class="block" id="square2">
+            <textarea name="note" id="note2" cols="30" rows="10" onclick="this.focus()"></textarea>
             <div class="diagonalResize bottom left"></div>
             <div class="diagonalResize bottom right"></div>
             <div class="diagonalResize top left"></div>
@@ -34,7 +36,7 @@
             <div class="bottomResize"></div>
         </div>
     </div>
-    <input id="add" type="button" value="+">
+    <input id="add" type="button" value="+" onclick="addNote()">
     <script src="scripts/brainstorm.js"></script>
 
 </body>
