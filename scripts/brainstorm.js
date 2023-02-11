@@ -1,8 +1,8 @@
 let note = document.querySelectorAll(".block");
 function setNotesListener(){
     for(let i=0; i<note.length; i++){
-        let rightBox = document.getElementsByClassName('leftResize')[i]
-        let leftBox =  document.getElementsByClassName('rightResize')[i]
+        let rightBox = document.getElementsByClassName('rightResize')[i]
+        let leftBox =  document.getElementsByClassName('leftResize')[i]
         let bottomBox =  document.getElementsByClassName('topResize')[i]
         let topBox =  document.getElementsByClassName('bottomResize')[i]
 
@@ -12,10 +12,24 @@ function setNotesListener(){
         let BottomTrigger = note[i].querySelectorAll('.bottom')
 
         let draggableBox = new Draggable(note[i],{
-            type:"x,y"
+            type:"x,y",
+            onClick:function(){
+                note[i].classList.add('active')
+                rightDraggable.enable()
+                leftDraggable.enable()
+                topDraggable.enable()
+                bottomDraggable.enable()
+            },
+            onDrag:function(){
+                note[i].classList.remove('active')
+                rightDraggable.disable()
+                leftDraggable.disable()
+                topDraggable.disable()
+                bottomDraggable.disable()
+            }
         });
         let rightLastX = 0;
-        Draggable.create(rightBox, {  
+        let rightDraggable = new Draggable(rightBox, {  
             trigger:rightTrigger,
             type:"x,y",
             onDrag: function(){
@@ -34,7 +48,7 @@ function setNotesListener(){
 
 
         let topLastY = 0;
-        Draggable.create(topBox, {
+        let topDraggable = new Draggable(topBox, {
             trigger:topTrigger,
             type:"x,y",
             onDrag: function(){
@@ -53,7 +67,7 @@ function setNotesListener(){
 
 
         let leftLastX = 0;
-        Draggable.create(leftBox, {
+        let leftDraggable = new Draggable(leftBox, {
             trigger:leftTrigger,
             type:"x,y",
             onDrag: function(){
@@ -72,7 +86,7 @@ function setNotesListener(){
 
 
         let bottomLastY = 0;
-        Draggable.create(bottomBox, {
+        let bottomDraggable = new Draggable(bottomBox, {
             trigger:BottomTrigger,
             type:"x,y",
             onDrag: function(){
