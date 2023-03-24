@@ -14,21 +14,6 @@ body, html{
 body{
     background-color: white;
 }
-textarea{
-    
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 75%;
-    height: 75%;
-    text-align: center;
-    background-color: #ffffff00;
-    border: none;
-    resize: none;
-    translate: -50% -50%;
-}
-textarea:focus{
-}
 .block{
     min-width: 60px;
     min-height: 60px;
@@ -38,6 +23,14 @@ textarea:focus{
     background-color: white;
     box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.388);
     position: absolute;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+    flex-wrap: wrap;
+    word-break:break-all
 }
 
 #square{
