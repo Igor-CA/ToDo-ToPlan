@@ -45,7 +45,7 @@ header > menu > ul{
     white-space: nowrap;
     overflow-x: auto;
 }
-header > menu > ul > li {
+.category{
     padding: 10px;
     height: 21px;
     margin: 0px 5px;
@@ -60,7 +60,7 @@ header > menu > ul > li {
     box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.41);
 }
 
-header > menu > ul > li.selected{
+.category.selected{
     background-color: var(--cor005);
     color: white;
 }

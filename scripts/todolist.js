@@ -45,7 +45,8 @@ const Task = (id, values) => {
 }
 
 const todoList = (() => {
-    let todoListHTML = document.getElementById('todo-list')
+    let todoListHTML = document.querySelector('#todo-list')
+    let categorysListHTML = document.querySelector('#categorys')
     let tasksList = [];
     let categorysList = [];
     
@@ -61,10 +62,61 @@ const todoList = (() => {
         
         todoListHTML.appendChild(newTask.getNodeHTML())
         tasksList.push(newTask)
+        addCategory(values.category)
     }
+
+    const addCategory = (name) => {
+        if(checkCategoryList(name)) return true 
+        
+        let newCategory = Category(name)
+        categorysListHTML.appendChild(newCategory.elementHTML)
+        categorysList.push(newCategory)
+    }
+
+    const checkCategoryList = (name) => {
+        for(let index in categorysList){
+            if(categorysList[index].name === name) return true
+        }
+        return false
+        
+    }
+
+    const selectCategory = (name) => {
+        categorysList.forEach((category) => {
+            
+            category.elementHTML.classList.remove('selected')
+            
+            if(category.name === name) 
+                category.elementHTML.classList.add('selected')
+        
+        })
+    }
+
     
-    return { tasksList, addTask }
+    return { tasksList, addTask, addCategory, selectCategory }
 })();
+
+const Category = (categoryName) => {
+
+    let name = categoryName
+    let elementHTML = document.createElement('li')
+    elementHTML.classList = 'category' 
+    elementHTML.innerHTML = name
+
+    elementHTML.addEventListener('click', () => {
+        todoList.selectCategory(name)
+    })
+
+    const addToDataList = (() => {
+        let dataList = document.querySelector('#categorys_list')
+        let option = document.createElement('option')
+        option.value = name
+        dataList.appendChild(option)
+    })();
+
+    return { elementHTML, name }
+}
+
 
 const addScreen = (() => {
 
@@ -73,6 +125,7 @@ const addScreen = (() => {
     let categoryInput = document.getElementById('category_input')
     let dateInput = document.getElementById('due_date')
     let repetitionInput = document.getElementById('task_repetition')
+    let addBtn = document.getElementById("add")
 
     const show = () => {
         document.body.classList.toggle('background-mask')
@@ -80,6 +133,9 @@ const addScreen = (() => {
         resetInputValues()
         nameInput.focus()
     }
+
+    addBtn.addEventListener("click", show)
+
     const hide = () => {
         document.body.classList.toggle('background-mask')
         screenContainer.classList.toggle('unvisible') 
@@ -115,36 +171,6 @@ const addScreen = (() => {
     return { show, hide, resetDate, returnScreenInputValues, checkForName }
 })();
 
-let add_btn = document.getElementById("add")
-let screen = document.getElementById('add_task_screen')
-
-add_btn.addEventListener("click", addScreen.show)
-
-
-function select_category(selected_category){
-    let categorys = document.querySelectorAll('#categorys>li')
-    for(let i=0; i<categorys.length; i++){
-        categorys[i].classList.remove('selected')
-    }
-    selected_category.classList = 'selected'
-    document.querySelector('main>h1').innerHTML =selected_category.textContent
-}
-/*
-function check_tasks(){
-    let tasks_check_boxes = document.querySelectorAll("#todo-list > li > input[type=checkbox]")
-    let task_list = document.querySelectorAll("main > ul > li")
-    
-    for(let element in tasks_check_boxes){
-        if(tasks_check_boxes[element].checked){
-            task_list[element].classList = 'done'
-        }
-        else{
-            task_list[element].classList = 'undone'
-        }
-    }
-    order_tasks()
-}
-*/
 function order_tasks(){
     let to_do_list = document.querySelector("#todo-list")
     let tasks_list = document.querySelectorAll("#todo-list>li")
@@ -160,33 +186,3 @@ function order_tasks(){
     }
 }
 
-
-
-function set_category(){
-    let category_input = document.getElementById('category_input')
-    let categorys_data_list = document.getElementById('categorys_list')
-    let item = document.createElement('option')
-    item.value = category_input.value
-    if(!check_in_category_list(item)){
-        categorys_data_list.appendChild(item)
-        add_to_category_selector(item.value)
-    }
-}
-
-function add_to_category_selector(category_name){
-    let categorys_list = document.getElementById('categorys')
-    let item = document.createElement('li')
-    item.innerText = category_name
-    item.setAttribute('onclick',' select_category(this)')
-    categorys_list.appendChild(item)
-}
-
-function check_in_category_list(item){
-    let category = document.querySelectorAll("#categorys_list > option")
-    for(let i=0; i<category.length; i++){
-        if(item.value == category[i].value){
-            return true
-        }
-    }
-    return false
-}
