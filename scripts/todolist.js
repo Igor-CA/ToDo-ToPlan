@@ -1,3 +1,10 @@
+function getCurrentDate(){
+    let currentDate = new Date()
+    let isoDate = currentDate.toISOString().slice(0,10);
+    return isoDate
+}
+
+
 const Task = (id, values) => {
     let name = values.name;
     let taskId = id;
@@ -10,15 +17,13 @@ const Task = (id, values) => {
     let listItem = document.createElement('li')
     let checkbox = document.createElement('input')
     let checkboxLabel = document.createElement('label')
-
-    checkbox.addEventListener('click', ()=>{
-        toggleStatus()
-    })
     
     const toggleStatus = () => {
         status = (status === 'undone')? 'done':'undone' ;
         listItem.classList = status;
     }
+
+    checkbox.addEventListener('click', toggleStatus)
 
     const getNodeHTML = () => {
         return listItem
@@ -34,28 +39,27 @@ const Task = (id, values) => {
         listItem.appendChild(checkboxLabel)
     }
 
-    const generateTaskJSON = () => {
+    const getTaskProperties = () => {
         let object = {name, taskId, description, repetition, dueDate, category, status}
         return object
     }
     
+    const getStatus = () => { return status }
+
     initHTML()
 
-    return { toggleStatus, getNodeHTML, generateTaskJSON}
+    return { getNodeHTML, getTaskProperties, getStatus }
 }
 
 const todoList = (() => {
     let todoListHTML = document.querySelector('#todo-list')
     let categorysListHTML = document.querySelector('#categorys')
     let tasksList = [];
+    let visibleTasksList = tasksList
     let categorysList = [];
     
-    const addTask = () => {
-        if(!addScreen.checkForName()) return 
+    const addTask = (values) => {
         
-        addScreen.hide()
-
-        let values = addScreen.returnScreenInputValues()
         let newTaskId = tasksList.length
         
         let newTask = Task(newTaskId, values)
@@ -63,7 +67,23 @@ const todoList = (() => {
         todoListHTML.appendChild(newTask.getNodeHTML())
         tasksList.push(newTask)
         addCategory(values.category)
+        selectCategory(values.category)
     }
+
+    const orderDoneTasks = () => {
+        //Put all incompleted tasks at end of html
+        visibleTasksList.forEach( (task) => {
+            if(task.getStatus() === 'undone')
+                todoListHTML.appendChild(task.getNodeHTML())
+        })
+        //Put all completed tasks at end of html so the incompleted stay at the top
+        visibleTasksList.forEach( (task) => {
+            if(task.getStatus() === 'done')
+                todoListHTML.appendChild(task.getNodeHTML())
+        })
+    }
+
+    todoListHTML.addEventListener('change', orderDoneTasks)
 
     const addCategory = (name) => {
         if(checkCategoryList(name)) return true 
@@ -82,6 +102,8 @@ const todoList = (() => {
     }
 
     const selectCategory = (name) => {
+        let categoryIndicator = document.querySelector('#category-indicator')
+        categoryIndicator.textContent = name
         categorysList.forEach((category) => {
             
             category.elementHTML.classList.remove('selected')
@@ -90,10 +112,31 @@ const todoList = (() => {
                 category.elementHTML.classList.add('selected')
         
         })
+        showTasksFromCategory(name)
     }
 
+    const showTasksFromCategory = (categoryName) => {
+        if(categoryName === 'All') { visibleTasksList = tasksList}
+        else if(categoryName === 'Today'){
+            visibleTasksList = tasksList.filter( (task) => {
+                let taskProperties = task.getTaskProperties()
+                return (taskProperties.dueDate === getCurrentDate())
+            }) 
+        }
+        else{
+            visibleTasksList = tasksList.filter( (task) => {
+                let taskProperties = task.getTaskProperties()
+                return (taskProperties.category === categoryName)
+            })  
+        }
+        todoListHTML.innerHTML = null
+        visibleTasksList.forEach( (task) => {
+            todoListHTML.appendChild(task.getNodeHTML())
+        })
+        orderDoneTasks()
+    }
     
-    return { tasksList, addTask, addCategory, selectCategory }
+    return { tasksList, addTask, addCategory, selectCategory, showTasksFromCategory }
 })();
 
 const Category = (categoryName) => {
@@ -120,12 +163,15 @@ const Category = (categoryName) => {
 
 const addScreen = (() => {
 
-    let screenContainer = document.getElementById('add_task_screen')
-    let nameInput = document.getElementById('new_task_name')
-    let categoryInput = document.getElementById('category_input')
-    let dateInput = document.getElementById('due_date')
-    let repetitionInput = document.getElementById('task_repetition')
-    let addBtn = document.getElementById("add")
+    let screenContainer = document.querySelector('#add_task_screen')
+    let nameInput = document.querySelector('#new_task_name')
+    let categoryInput = document.querySelector('#category_input')
+    let dateInput = document.querySelector('#due_date')
+    let repetitionInput = document.querySelector('#task_repetition')
+    let addBtn = document.querySelector("#add")
+    let saveBtn = document.querySelector("#save_new_task_button")
+    let cancelBtn = document.querySelector('#cancel_new_task_button')
+    let resetDateBtn = document.querySelector('#reset_date')
 
     const show = () => {
         document.body.classList.toggle('background-mask')
@@ -141,12 +187,14 @@ const addScreen = (() => {
         screenContainer.classList.toggle('unvisible') 
     }
 
+    cancelBtn.addEventListener('click', hide)
+
     const returnScreenInputValues = () => {
         let name = nameInput.value
-        let date = (dateInput.value !== '')? dateInput.value: '2003-03-23'
-        let category = (categoryInput.value !== '')? categoryInput.value: 'none'
+        let dueDate = (dateInput.value !== '')? dateInput.value: getCurrentDate()
+        let category = (categoryInput.value !== '')? categoryInput.value: 'No category'
         let repetition = repetitionInput.value
-        return {name, category, date, repetition}
+        return {name, category, dueDate, repetition}
     }
 
     const resetInputValues = () => {
@@ -160,6 +208,8 @@ const addScreen = (() => {
         dateInput.value =  null
     }
 
+    resetDateBtn.addEventListener('click', resetDate)
+
     const checkForName = () => {
         if(nameInput.value.length > 0) return true
         
@@ -168,21 +218,27 @@ const addScreen = (() => {
         return false
     }
 
+    saveBtn.addEventListener('click', () => { 
+        if(!checkForName()) return 
+        hide()
+        let values = returnScreenInputValues()
+        todoList.addTask(values) 
+    })
+
     return { show, hide, resetDate, returnScreenInputValues, checkForName }
 })();
 
-function order_tasks(){
-    let to_do_list = document.querySelector("#todo-list")
-    let tasks_list = document.querySelectorAll("#todo-list>li")
-    for(let task in tasks_list){
-        if(tasks_list[task].className == 'undone'){
-            to_do_list.appendChild(tasks_list[task])
-        }
-    }
-    for(let task in tasks_list){
-        if(tasks_list[task].className == 'done'){
-            to_do_list.appendChild(tasks_list[task])
-        }
-    }
+//Delete later this is just for visualization
+let testTasks = {
+    name:'Task',
+    category: 'All',
+    dueDate: getCurrentDate(),
+    repetition: 'once'
 }
 
+todoList.addCategory('All')
+todoList.addCategory('Today')
+todoList.addCategory('No category')
+todoList.addTask(testTasks)
+todoList.addTask(testTasks)
+todoList.addTask(testTasks)
