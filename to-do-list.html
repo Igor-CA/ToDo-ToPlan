@@ -13,26 +13,12 @@
     <header>
         <menu>
             <ul id="categorys">
-                <li onclick="select_category(this);">All  </li>
-                <li onclick="select_category(this);">Today</li>
             </ul>
         </menu>
     </header>
     <main>
-        <h1>Category</h1>
-        <ul onclick="check_tasks()" id="todo-list">
-            <li class="undone">
-                <input type="checkbox" name="task0" id="task0">
-                <label for="task0">Task0</label>
-            </li>
-            <li class="undone">
-                <input type="checkbox" name="task1" id="task1">
-                <label for="task1">Task1</label>
-            </li>
-            <li class="undone">
-                <input type="checkbox" name="task2" id="task2">
-                <label for="task2">Task2</label>
-            </li>
+        <h1 id="category-indicator">Category</h1>
+        <ul id="todo-list">
         </ul>
         
 
@@ -49,7 +35,7 @@
 
             <label for="due_date">Due date:</label>
             <input type="date" name="due_date" id="due_date" defaultValue={currentDate}>
-            <button id="reset_date" onclick="reset_date()">
+            <button id="reset_date" onclick="addScreen.resetDate()">
                 <i class="fa fa-close"></i>
             </button>
             
@@ -65,8 +51,8 @@
                 <option value="7">Yearly</option>
             </select>
             
-            <button id="cancel_new_task_button" class="finish" onclick="close_add_screen()">Cancel <i class="fa fa-close"></i> </button>
-            <button id="save_new_task_button" class="finish" onclick="add_new_task()">Add<i class="fa fa-check"></i></button>
+            <button id="cancel_new_task_button" class="finish">Cancel <i class="fa fa-close"></i> </button>
+            <button id="save_new_task_button" class="finish">Add<i class="fa fa-check"></i></button>
         </section>
         
         <script src="scripts/todolist.js"></script>
