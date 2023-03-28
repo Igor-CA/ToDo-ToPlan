@@ -8,11 +8,10 @@ function getCurrentDate(){
 const Task = (id, values) => {
     let name = values.name;
     let taskId = id;
-    let description = values.description;
     let repetition = values.repetition;
     let dueDate = values.dueDate;
     let category = values.category;
-    let status = 'undone';
+    let status = values.status;
     
     let listItem = document.createElement('li')
     let checkbox = document.createElement('input')
@@ -33,6 +32,9 @@ const Task = (id, values) => {
         listItem.classList = status
         checkbox.type = 'checkbox'
         checkbox.id = `task-${taskId}`
+        
+        if(status === 'done'){ checkbox.checked = true}
+
         checkboxLabel.htmlFor = `task-${taskId}`
         checkboxLabel.innerHTML = `${name}`
         listItem.appendChild(checkbox)
@@ -40,7 +42,7 @@ const Task = (id, values) => {
     }
 
     const getTaskProperties = () => {
-        let object = {name, taskId, description, repetition, dueDate, category, status}
+        let object = {name, taskId, repetition, dueDate, category, status}
         return object
     }
     
@@ -51,12 +53,10 @@ const Task = (id, values) => {
     return { getNodeHTML, getTaskProperties, getStatus }
 }
 
-const todoList = (() => {
+const taskMannager = (() => {
     let todoListHTML = document.querySelector('#todo-list')
-    let categorysListHTML = document.querySelector('#categorys')
     let tasksList = [];
     let visibleTasksList = tasksList
-    let categorysList = [];
     
     const addTask = (values) => {
         
@@ -66,8 +66,8 @@ const todoList = (() => {
         
         todoListHTML.appendChild(newTask.getNodeHTML())
         tasksList.push(newTask)
-        addCategory(values.category)
-        selectCategory(values.category)
+        categoryManagger.addCategory(values.category)
+        categoryManagger.selectCategory(values.category)
     }
 
     const orderDoneTasks = () => {
@@ -83,7 +83,57 @@ const todoList = (() => {
         })
     }
 
+    const showTasksFromCategory = (categoryName) => {
+        if(categoryName === 'All') { visibleTasksList = tasksList}
+        else if(categoryName === 'Today'){
+            visibleTasksList = tasksList.filter( (task) => {
+                let taskProperties = task.getTaskProperties()
+                return (taskProperties.dueDate === getCurrentDate())
+            }) 
+        }
+        else{
+            visibleTasksList = tasksList.filter( (task) => {
+                let taskProperties = task.getTaskProperties()
+                return (taskProperties.category === categoryName)
+            })  
+        }
+        todoListHTML.innerHTML = null
+        visibleTasksList.forEach( (task) => {
+            todoListHTML.appendChild(task.getNodeHTML())
+        })
+        orderDoneTasks()
+    }
+
     todoListHTML.addEventListener('change', orderDoneTasks)
+    
+    return { tasksList, addTask, showTasksFromCategory }
+})();
+
+const Category = (categoryName) => {
+
+    let name = categoryName
+    let elementHTML = document.createElement('li')
+    elementHTML.classList = 'category' 
+    elementHTML.innerHTML = name
+
+    elementHTML.addEventListener('click', () => {
+        categoryManagger.selectCategory(name)
+    })
+
+    const addToDataList = (() => {
+        let dataList = document.querySelector('#categorys_list')
+        let option = document.createElement('option')
+        option.value = name
+        dataList.appendChild(option)
+    })();
+
+    return { elementHTML, name }
+}
+
+const categoryManagger = (() => {
+
+    let categorysListHTML = document.querySelector('#categorys')
+    let categorysList = [];
 
     const addCategory = (name) => {
         if(checkCategoryList(name)) return true 
@@ -112,54 +162,11 @@ const todoList = (() => {
                 category.elementHTML.classList.add('selected')
         
         })
-        showTasksFromCategory(name)
+        taskMannager.showTasksFromCategory(name)
     }
 
-    const showTasksFromCategory = (categoryName) => {
-        if(categoryName === 'All') { visibleTasksList = tasksList}
-        else if(categoryName === 'Today'){
-            visibleTasksList = tasksList.filter( (task) => {
-                let taskProperties = task.getTaskProperties()
-                return (taskProperties.dueDate === getCurrentDate())
-            }) 
-        }
-        else{
-            visibleTasksList = tasksList.filter( (task) => {
-                let taskProperties = task.getTaskProperties()
-                return (taskProperties.category === categoryName)
-            })  
-        }
-        todoListHTML.innerHTML = null
-        visibleTasksList.forEach( (task) => {
-            todoListHTML.appendChild(task.getNodeHTML())
-        })
-        orderDoneTasks()
-    }
-    
-    return { tasksList, addTask, addCategory, selectCategory, showTasksFromCategory }
+    return { addCategory, selectCategory }
 })();
-
-const Category = (categoryName) => {
-
-    let name = categoryName
-    let elementHTML = document.createElement('li')
-    elementHTML.classList = 'category' 
-    elementHTML.innerHTML = name
-
-    elementHTML.addEventListener('click', () => {
-        todoList.selectCategory(name)
-    })
-
-    const addToDataList = (() => {
-        let dataList = document.querySelector('#categorys_list')
-        let option = document.createElement('option')
-        option.value = name
-        dataList.appendChild(option)
-    })();
-
-    return { elementHTML, name }
-}
-
 
 const addScreen = (() => {
 
@@ -194,7 +201,8 @@ const addScreen = (() => {
         let dueDate = (dateInput.value !== '')? dateInput.value: getCurrentDate()
         let category = (categoryInput.value !== '')? categoryInput.value: 'No category'
         let repetition = repetitionInput.value
-        return {name, category, dueDate, repetition}
+        let status = 'done'
+        return {name, category, dueDate, repetition, status}
     }
 
     const resetInputValues = () => {
@@ -222,23 +230,12 @@ const addScreen = (() => {
         if(!checkForName()) return 
         hide()
         let values = returnScreenInputValues()
-        todoList.addTask(values) 
+        taskMannager.addTask(values) 
     })
 
     return { show, hide, resetDate, returnScreenInputValues, checkForName }
 })();
 
-//Delete later this is just for visualization
-let testTasks = {
-    name:'Task',
-    category: 'All',
-    dueDate: getCurrentDate(),
-    repetition: 'once'
-}
-
-todoList.addCategory('All')
-todoList.addCategory('Today')
-todoList.addCategory('No category')
-todoList.addTask(testTasks)
-todoList.addTask(testTasks)
-todoList.addTask(testTasks)
+categoryManagger.addCategory('All')
+categoryManagger.addCategory('Today')
+categoryManagger.addCategory('No category')
