@@ -20,6 +20,7 @@ const Task = (id, values) => {
     const toggleStatus = () => {
         status = (status === 'undone')? 'done':'undone' ;
         listItem.classList = status;
+        saveTask()
     }
 
     checkbox.addEventListener('click', toggleStatus)
@@ -48,7 +49,19 @@ const Task = (id, values) => {
     
     const getStatus = () => { return status }
 
+    const getTaskJSON = () => {
+        let object = JSON.stringify({name, taskId, repetition, dueDate, category, status})
+        return object
+    }
+
+    const saveTask = () => {
+        let keyValue = `Task${taskId}`
+        let object = getTaskJSON()
+        localStorage.setItem(keyValue, object)
+    }
+    
     initHTML()
+    saveTask()
 
     return { getNodeHTML, getTaskProperties, getStatus }
 }
@@ -104,9 +117,24 @@ const taskMannager = (() => {
         orderDoneTasks()
     }
 
+    const loadTasks = () => {
+        let newTask = {}
+        let id = 0
+        while(newTask !== null){
+            newTask = localStorage.getItem(`Task${id}`)
+            newTask = JSON.parse(newTask)
+            if(newTask !== null){
+                addTask(newTask)
+            }
+            id++
+        }
+        categoryManagger.selectCategory('All')
+    }
+
+
     todoListHTML.addEventListener('change', orderDoneTasks)
-    
-    return { tasksList, addTask, showTasksFromCategory }
+
+    return { tasksList, addTask, showTasksFromCategory, loadTasks }
 })();
 
 const Category = (categoryName) => {
@@ -201,7 +229,7 @@ const addScreen = (() => {
         let dueDate = (dateInput.value !== '')? dateInput.value: getCurrentDate()
         let category = (categoryInput.value !== '')? categoryInput.value: 'No category'
         let repetition = repetitionInput.value
-        let status = 'done'
+        let status = 'undone'
         return {name, category, dueDate, repetition, status}
     }
 
@@ -239,3 +267,4 @@ const addScreen = (() => {
 categoryManagger.addCategory('All')
 categoryManagger.addCategory('Today')
 categoryManagger.addCategory('No category')
+taskMannager.loadTasks()
