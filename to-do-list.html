@@ -24,7 +24,7 @@
 
         <input id="add" type="button" value="+">
         
-        <section id="add_task_screen" class="unvisible">     
+        <section id="add_task_screen" class="invisible">     
             <input type="text" name="new_task_name" id="new_task_name" placeholder="Input new task here" autocomplete="off">
             <label for="add_text"></label>
             
@@ -32,13 +32,6 @@
             <input type="text" name="category_input" id="category_input" list="categorys_list" autocomplete="off">
             <datalist id="categorys_list">
             </datalist>
-
-            <label for="due_date">Due date:</label>
-            <input type="date" name="due_date" id="due_date" defaultValue={currentDate}>
-            <button id="reset_date" onclick="addScreen.resetDate()">
-                <i class="fa fa-close"></i>
-            </button>
-            
 
             <label for="task_repetition">Repetition:</label>
             <select name="task_repetition" id="task_repetition">
@@ -50,9 +43,17 @@
                 <option value="6">Monthly</option>
                 <option value="7">Yearly</option>
             </select>
+
+            <label for="due_date">Due date:</label>
+            <input type="date" name="due_date" id="due_date" defaultValue={currentDate}>
+            <button id="reset_date" onclick="addScreen.resetDate()">
+                <i class="fa fa-close"></i>
+            </button>
+            
             
             <button id="cancel_new_task_button" class="finish">Cancel <i class="fa fa-close"></i> </button>
-            <button id="save_new_task_button" class="finish">Add<i class="fa fa-check"></i></button>
+            <button id="add_new_task_button" class="finish">Add<i class="fa fa-check"></i></button>
+            <button id="save_new_task_button" class="finish invisible">Save<i class="fa fa-check"></i></button>
         </section>
         
         <script src="scripts/todolist.js"></script>

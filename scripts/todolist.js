@@ -16,6 +16,8 @@ const Task = (id, values) => {
     let listItem = document.createElement('li')
     let checkbox = document.createElement('input')
     let checkboxLabel = document.createElement('label')
+    let deleteInput = document.createElement('button')
+    let editInput = document.createElement('button')
     
     const toggleStatus = () => {
         status = (status === 'undone')? 'done':'undone' ;
@@ -24,12 +26,19 @@ const Task = (id, values) => {
     }
 
     checkbox.addEventListener('click', toggleStatus)
+    
+    deleteInput.addEventListener('click', () => {
+        taskMannager.deleteTask(taskId)
+    })
+    editInput.addEventListener('click', () => {
+        taskPropertiesScreen.edit(getTaskProperties())
+    })
 
     const getNodeHTML = () => {
         return listItem
     }
 
-    const initHTML = () =>{
+    const generateHTML = () =>{
         listItem.classList = status
         checkbox.type = 'checkbox'
         checkbox.id = `task-${taskId}`
@@ -38,9 +47,13 @@ const Task = (id, values) => {
 
         checkboxLabel.htmlFor = `task-${taskId}`
         checkboxLabel.innerHTML = `${name}`
+        deleteInput.innerHTML = '<i class="fa fa-trash-o" aria-hidden="true"></i>'
+        editInput.innerHTML = '<i class="fa fa-pencil" aria-hidden="true"></i>'
         listItem.appendChild(checkbox)
         listItem.appendChild(checkboxLabel)
-    }
+        listItem.appendChild(deleteInput)
+        listItem.appendChild(editInput)
+    };
 
     const getTaskProperties = () => {
         let object = {name, taskId, repetition, dueDate, category, status}
@@ -55,15 +68,29 @@ const Task = (id, values) => {
     }
 
     const saveTask = () => {
-        let keyValue = `Task${taskId}`
+        let keyValue = `Task-${taskId}`
         let object = getTaskJSON()
         localStorage.setItem(keyValue, object)
     }
+
+    const updateId = (newId) => {
+        taskId = newId
+        saveTask()
+    }
+
+    const edit = (newValues) => {
+        name = newValues.name;
+        repetition = newValues.repetition;
+        dueDate = newValues.dueDate;
+        category = newValues.category;
+        generateHTML()
+        saveTask()
+    }
     
-    initHTML()
+    generateHTML()
     saveTask()
 
-    return { getNodeHTML, getTaskProperties, getStatus }
+    return { name, getNodeHTML, getTaskProperties, getStatus, updateId, edit }
 }
 
 const taskMannager = (() => {
@@ -79,7 +106,6 @@ const taskMannager = (() => {
         
         todoListHTML.appendChild(newTask.getNodeHTML())
         tasksList.push(newTask)
-        categoryManagger.addCategory(values.category)
         categoryManagger.selectCategory(values.category)
     }
 
@@ -110,6 +136,10 @@ const taskMannager = (() => {
                 return (taskProperties.category === categoryName)
             })  
         }
+        showVisibleTasks()
+    }
+
+    const showVisibleTasks = () => {
         todoListHTML.innerHTML = null
         visibleTasksList.forEach( (task) => {
             todoListHTML.appendChild(task.getNodeHTML())
@@ -121,7 +151,7 @@ const taskMannager = (() => {
         let newTask = {}
         let id = 0
         while(newTask !== null){
-            newTask = localStorage.getItem(`Task${id}`)
+            newTask = localStorage.getItem(`Task-${id}`)
             newTask = JSON.parse(newTask)
             if(newTask !== null){
                 addTask(newTask)
@@ -131,10 +161,22 @@ const taskMannager = (() => {
         categoryManagger.selectCategory('All')
     }
 
+    const deleteTask = (taskId) => {
+        tasksList.splice(taskId, 1)
+        showTasksFromCategory(categoryManagger.getSelectedCategory())
+        updatesIds()
+        localStorage.removeItem(`Task-${tasksList.length}`)
+    }
+
+    const updatesIds = () => {
+        tasksList.forEach( (task, id) => {
+            task.updateId(id)
+        })
+    }
 
     todoListHTML.addEventListener('change', orderDoneTasks)
 
-    return { tasksList, addTask, showTasksFromCategory, loadTasks }
+    return { tasksList, addTask, showTasksFromCategory, loadTasks, deleteTask, updatesIds }
 })();
 
 const Category = (categoryName) => {
@@ -162,6 +204,7 @@ const categoryManagger = (() => {
 
     let categorysListHTML = document.querySelector('#categorys')
     let categorysList = [];
+    let selectedCategory = 'All'
 
     const addCategory = (name) => {
         if(checkCategoryList(name)) return true 
@@ -180,23 +223,30 @@ const categoryManagger = (() => {
     }
 
     const selectCategory = (name) => {
+        addCategory(name)
         let categoryIndicator = document.querySelector('#category-indicator')
-        categoryIndicator.textContent = name
+        selectedCategory =  name
+        categoryIndicator.textContent = selectedCategory
         categorysList.forEach((category) => {
             
             category.elementHTML.classList.remove('selected')
             
-            if(category.name === name) 
+            if(category.name === selectedCategory) 
                 category.elementHTML.classList.add('selected')
         
         })
-        taskMannager.showTasksFromCategory(name)
+        taskMannager.showTasksFromCategory(selectedCategory)
     }
 
-    return { addCategory, selectCategory }
+    const getSelectedCategory = () => {
+        return selectedCategory
+    }
+
+
+    return { addCategory, selectCategory, getSelectedCategory }
 })();
 
-const addScreen = (() => {
+const taskPropertiesScreen = (() => {
 
     let screenContainer = document.querySelector('#add_task_screen')
     let nameInput = document.querySelector('#new_task_name')
@@ -204,25 +254,46 @@ const addScreen = (() => {
     let dateInput = document.querySelector('#due_date')
     let repetitionInput = document.querySelector('#task_repetition')
     let addBtn = document.querySelector("#add")
-    let saveBtn = document.querySelector("#save_new_task_button")
+    let saveNewTaskBtn = document.querySelector("#add_new_task_button")
+    let saveEditBtn = document.querySelector("#save_new_task_button")
     let cancelBtn = document.querySelector('#cancel_new_task_button')
     let resetDateBtn = document.querySelector('#reset_date')
+    let editedTaskId = null
 
     const show = () => {
         document.body.classList.toggle('background-mask')
-        screenContainer.classList.toggle('unvisible')   
+        screenContainer.classList.toggle('invisible')   
         resetInputValues()
         nameInput.focus()
     }
+    const showAddScreen = () => {
+        show()
+        saveEditBtn.classList.add('invisible')
+        saveNewTaskBtn.classList.remove('invisible')
+    }
+    const showEditScreen = () => {
+        show()
+        saveEditBtn.classList.remove('invisible')
+        saveNewTaskBtn.classList.add('invisible')
+    }
 
-    addBtn.addEventListener("click", show)
+    addBtn.addEventListener("click", showAddScreen)
 
     const hide = () => {
         document.body.classList.toggle('background-mask')
-        screenContainer.classList.toggle('unvisible') 
+        screenContainer.classList.toggle('invisible') 
     }
 
     cancelBtn.addEventListener('click', hide)
+
+    const edit = (taskValues) => {
+        showEditScreen()
+        nameInput.value = taskValues.name
+        categoryInput.value = taskValues.category
+        repetitionInput.value = taskValues.repetition 
+        dateInput.value = taskValues.dueDate
+        editedTaskId = taskValues.taskId
+    }
 
     const returnScreenInputValues = () => {
         let name = nameInput.value
@@ -254,17 +325,23 @@ const addScreen = (() => {
         return false
     }
 
-    saveBtn.addEventListener('click', () => { 
+    saveNewTaskBtn.addEventListener('click', () => { 
         if(!checkForName()) return 
         hide()
         let values = returnScreenInputValues()
         taskMannager.addTask(values) 
     })
-
-    return { show, hide, resetDate, returnScreenInputValues, checkForName }
+    
+    saveEditBtn.addEventListener('click', () => { 
+        if(!checkForName()) return 
+        hide()
+        let newValues = returnScreenInputValues()
+        taskMannager.tasksList[editedTaskId].edit(newValues)
+    })
+    
+    return { edit }
 })();
 
 categoryManagger.addCategory('All')
 categoryManagger.addCategory('Today')
-categoryManagger.addCategory('No category')
 taskMannager.loadTasks()
