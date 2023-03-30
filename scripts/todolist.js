@@ -16,7 +16,8 @@ const Task = (id, values) => {
     let listItem = document.createElement('li')
     let checkbox = document.createElement('input')
     let checkboxLabel = document.createElement('label')
-    let deleteInput = document.createElement('input')
+    let deleteInput = document.createElement('button')
+    let editInput = document.createElement('button')
     
     const toggleStatus = () => {
         status = (status === 'undone')? 'done':'undone' ;
@@ -29,12 +30,15 @@ const Task = (id, values) => {
     deleteInput.addEventListener('click', () => {
         taskMannager.deleteTask(taskId)
     })
+    editInput.addEventListener('click', () => {
+        taskPropertiesScreen.edit(getTaskProperties())
+    })
 
     const getNodeHTML = () => {
         return listItem
     }
 
-    const initHTML = (() =>{
+    const generateHTML = () =>{
         listItem.classList = status
         checkbox.type = 'checkbox'
         checkbox.id = `task-${taskId}`
@@ -43,12 +47,13 @@ const Task = (id, values) => {
 
         checkboxLabel.htmlFor = `task-${taskId}`
         checkboxLabel.innerHTML = `${name}`
-        deleteInput.type = 'button'
-        deleteInput.value = 'Delete'
+        deleteInput.innerHTML = '<i class="fa fa-trash-o" aria-hidden="true"></i>'
+        editInput.innerHTML = '<i class="fa fa-pencil" aria-hidden="true"></i>'
         listItem.appendChild(checkbox)
         listItem.appendChild(checkboxLabel)
         listItem.appendChild(deleteInput)
-    })();
+        listItem.appendChild(editInput)
+    };
 
     const getTaskProperties = () => {
         let object = {name, taskId, repetition, dueDate, category, status}
@@ -72,10 +77,20 @@ const Task = (id, values) => {
         taskId = newId
         saveTask()
     }
+
+    const edit = (newValues) => {
+        name = newValues.name;
+        repetition = newValues.repetition;
+        dueDate = newValues.dueDate;
+        category = newValues.category;
+        generateHTML()
+        saveTask()
+    }
     
+    generateHTML()
     saveTask()
 
-    return { getNodeHTML, getTaskProperties, getStatus, updateId }
+    return { name, getNodeHTML, getTaskProperties, getStatus, updateId, edit }
 }
 
 const taskMannager = (() => {
@@ -91,7 +106,6 @@ const taskMannager = (() => {
         
         todoListHTML.appendChild(newTask.getNodeHTML())
         tasksList.push(newTask)
-        categoryManagger.addCategory(values.category)
         categoryManagger.selectCategory(values.category)
     }
 
@@ -148,11 +162,10 @@ const taskMannager = (() => {
     }
 
     const deleteTask = (taskId) => {
-        localStorage.removeItem(`Task-${taskId}`)
         tasksList.splice(taskId, 1)
-        console.log(categoryManagger.getSelectedCategory())
         showTasksFromCategory(categoryManagger.getSelectedCategory())
         updatesIds()
+        localStorage.removeItem(`Task-${tasksList.length}`)
     }
 
     const updatesIds = () => {
@@ -160,7 +173,6 @@ const taskMannager = (() => {
             task.updateId(id)
         })
     }
-
 
     todoListHTML.addEventListener('change', orderDoneTasks)
 
@@ -211,6 +223,7 @@ const categoryManagger = (() => {
     }
 
     const selectCategory = (name) => {
+        addCategory(name)
         let categoryIndicator = document.querySelector('#category-indicator')
         selectedCategory =  name
         categoryIndicator.textContent = selectedCategory
@@ -233,7 +246,7 @@ const categoryManagger = (() => {
     return { addCategory, selectCategory, getSelectedCategory }
 })();
 
-const addScreen = (() => {
+const taskPropertiesScreen = (() => {
 
     let screenContainer = document.querySelector('#add_task_screen')
     let nameInput = document.querySelector('#new_task_name')
@@ -241,25 +254,46 @@ const addScreen = (() => {
     let dateInput = document.querySelector('#due_date')
     let repetitionInput = document.querySelector('#task_repetition')
     let addBtn = document.querySelector("#add")
-    let saveBtn = document.querySelector("#save_new_task_button")
+    let saveNewTaskBtn = document.querySelector("#add_new_task_button")
+    let saveEditBtn = document.querySelector("#save_new_task_button")
     let cancelBtn = document.querySelector('#cancel_new_task_button')
     let resetDateBtn = document.querySelector('#reset_date')
+    let editedTaskId = null
 
     const show = () => {
         document.body.classList.toggle('background-mask')
-        screenContainer.classList.toggle('unvisible')   
+        screenContainer.classList.toggle('invisible')   
         resetInputValues()
         nameInput.focus()
     }
+    const showAddScreen = () => {
+        show()
+        saveEditBtn.classList.add('invisible')
+        saveNewTaskBtn.classList.remove('invisible')
+    }
+    const showEditScreen = () => {
+        show()
+        saveEditBtn.classList.remove('invisible')
+        saveNewTaskBtn.classList.add('invisible')
+    }
 
-    addBtn.addEventListener("click", show)
+    addBtn.addEventListener("click", showAddScreen)
 
     const hide = () => {
         document.body.classList.toggle('background-mask')
-        screenContainer.classList.toggle('unvisible') 
+        screenContainer.classList.toggle('invisible') 
     }
 
     cancelBtn.addEventListener('click', hide)
+
+    const edit = (taskValues) => {
+        showEditScreen()
+        nameInput.value = taskValues.name
+        categoryInput.value = taskValues.category
+        repetitionInput.value = taskValues.repetition 
+        dateInput.value = taskValues.dueDate
+        editedTaskId = taskValues.taskId
+    }
 
     const returnScreenInputValues = () => {
         let name = nameInput.value
@@ -291,14 +325,21 @@ const addScreen = (() => {
         return false
     }
 
-    saveBtn.addEventListener('click', () => { 
+    saveNewTaskBtn.addEventListener('click', () => { 
         if(!checkForName()) return 
         hide()
         let values = returnScreenInputValues()
         taskMannager.addTask(values) 
     })
-
-    return { show, hide }
+    
+    saveEditBtn.addEventListener('click', () => { 
+        if(!checkForName()) return 
+        hide()
+        let newValues = returnScreenInputValues()
+        taskMannager.tasksList[editedTaskId].edit(newValues)
+    })
+    
+    return { edit }
 })();
 
 categoryManagger.addCategory('All')

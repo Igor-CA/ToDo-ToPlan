@@ -199,6 +199,6 @@ main >section#add_task_screen > button#reset_date{
     cursor: pointer;
 }
 
-.unvisible{
+.invisible{
     display: none;
 }
