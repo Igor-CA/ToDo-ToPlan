@@ -13,15 +13,32 @@
 </head>
 <body>
     <div id="workspace">
-        <div class="block" id="square" onmousedown="this.classList.add('active')" onmouseup="this.classList.remove('active')">
-            Vermelha
+        <div class="block" id="square">
+            <div class="diagonalResize bottom left"></div>
+            <div class="diagonalResize bottom right"></div>
+            <div class="diagonalResize top left"></div>
+            <div class="diagonalResize top right"></div>
+            <div class="leftResize"></div>
+            <div class="rightResize"></div>
+            <div class="topResize"></div>
+            <div class="bottomResize"></div>
         </div>
-        <div class="block" id="square2" onmousedown="this.classList.add('active')" onmouseup="this.classList.remove('active')">
-            Verde
+        <div class="block" id="square2">
+            <div class="diagonalResize bottom left"></div>
+            <div class="diagonalResize bottom right"></div>
+            <div class="diagonalResize top left"></div>
+            <div class="diagonalResize top right"></div>
+            <div class="leftResize"></div>
+            <div class="rightResize"></div>
+            <div class="topResize"></div>
+            <div class="bottomResize"></div>
         </div>
     </div>
-    <input id="add" type="button" value="+">
+    <input id="add" type="button" value="+" onclick="addNote()">
     <script src="scripts/brainstorm.js"></script>
+
+
+    </div>
 
 </body>
 </html>
