@@ -16,6 +16,7 @@ const Task = (id, values) => {
     let listItem = document.createElement('li')
     let checkbox = document.createElement('input')
     let checkboxLabel = document.createElement('label')
+    let deleteInput = document.createElement('input')
     
     const toggleStatus = () => {
         status = (status === 'undone')? 'done':'undone' ;
@@ -24,12 +25,16 @@ const Task = (id, values) => {
     }
 
     checkbox.addEventListener('click', toggleStatus)
+    
+    deleteInput.addEventListener('click', () => {
+        taskMannager.deleteTask(taskId)
+    })
 
     const getNodeHTML = () => {
         return listItem
     }
 
-    const initHTML = () =>{
+    const initHTML = (() =>{
         listItem.classList = status
         checkbox.type = 'checkbox'
         checkbox.id = `task-${taskId}`
@@ -38,9 +43,12 @@ const Task = (id, values) => {
 
         checkboxLabel.htmlFor = `task-${taskId}`
         checkboxLabel.innerHTML = `${name}`
+        deleteInput.type = 'button'
+        deleteInput.value = 'Delete'
         listItem.appendChild(checkbox)
         listItem.appendChild(checkboxLabel)
-    }
+        listItem.appendChild(deleteInput)
+    })();
 
     const getTaskProperties = () => {
         let object = {name, taskId, repetition, dueDate, category, status}
@@ -55,15 +63,19 @@ const Task = (id, values) => {
     }
 
     const saveTask = () => {
-        let keyValue = `Task${taskId}`
+        let keyValue = `Task-${taskId}`
         let object = getTaskJSON()
         localStorage.setItem(keyValue, object)
     }
+
+    const updateId = (newId) => {
+        taskId = newId
+        saveTask()
+    }
     
-    initHTML()
     saveTask()
 
-    return { getNodeHTML, getTaskProperties, getStatus }
+    return { getNodeHTML, getTaskProperties, getStatus, updateId }
 }
 
 const taskMannager = (() => {
@@ -110,6 +122,10 @@ const taskMannager = (() => {
                 return (taskProperties.category === categoryName)
             })  
         }
+        showVisibleTasks()
+    }
+
+    const showVisibleTasks = () => {
         todoListHTML.innerHTML = null
         visibleTasksList.forEach( (task) => {
             todoListHTML.appendChild(task.getNodeHTML())
@@ -121,7 +137,7 @@ const taskMannager = (() => {
         let newTask = {}
         let id = 0
         while(newTask !== null){
-            newTask = localStorage.getItem(`Task${id}`)
+            newTask = localStorage.getItem(`Task-${id}`)
             newTask = JSON.parse(newTask)
             if(newTask !== null){
                 addTask(newTask)
@@ -131,10 +147,24 @@ const taskMannager = (() => {
         categoryManagger.selectCategory('All')
     }
 
+    const deleteTask = (taskId) => {
+        localStorage.removeItem(`Task-${taskId}`)
+        tasksList.splice(taskId, 1)
+        console.log(categoryManagger.getSelectedCategory())
+        showTasksFromCategory(categoryManagger.getSelectedCategory())
+        updatesIds()
+    }
+
+    const updatesIds = () => {
+        tasksList.forEach( (task, id) => {
+            task.updateId(id)
+        })
+    }
+
 
     todoListHTML.addEventListener('change', orderDoneTasks)
 
-    return { tasksList, addTask, showTasksFromCategory, loadTasks }
+    return { tasksList, addTask, showTasksFromCategory, loadTasks, deleteTask, updatesIds }
 })();
 
 const Category = (categoryName) => {
@@ -162,6 +192,7 @@ const categoryManagger = (() => {
 
     let categorysListHTML = document.querySelector('#categorys')
     let categorysList = [];
+    let selectedCategory = 'All'
 
     const addCategory = (name) => {
         if(checkCategoryList(name)) return true 
@@ -181,19 +212,25 @@ const categoryManagger = (() => {
 
     const selectCategory = (name) => {
         let categoryIndicator = document.querySelector('#category-indicator')
-        categoryIndicator.textContent = name
+        selectedCategory =  name
+        categoryIndicator.textContent = selectedCategory
         categorysList.forEach((category) => {
             
             category.elementHTML.classList.remove('selected')
             
-            if(category.name === name) 
+            if(category.name === selectedCategory) 
                 category.elementHTML.classList.add('selected')
         
         })
-        taskMannager.showTasksFromCategory(name)
+        taskMannager.showTasksFromCategory(selectedCategory)
     }
 
-    return { addCategory, selectCategory }
+    const getSelectedCategory = () => {
+        return selectedCategory
+    }
+
+
+    return { addCategory, selectCategory, getSelectedCategory }
 })();
 
 const addScreen = (() => {
@@ -261,10 +298,9 @@ const addScreen = (() => {
         taskMannager.addTask(values) 
     })
 
-    return { show, hide, resetDate, returnScreenInputValues, checkForName }
+    return { show, hide }
 })();
 
 categoryManagger.addCategory('All')
 categoryManagger.addCategory('Today')
-categoryManagger.addCategory('No category')
 taskMannager.loadTasks()

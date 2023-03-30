@@ -33,13 +33,6 @@
             <datalist id="categorys_list">
             </datalist>
 
-            <label for="due_date">Due date:</label>
-            <input type="date" name="due_date" id="due_date" defaultValue={currentDate}>
-            <button id="reset_date" onclick="addScreen.resetDate()">
-                <i class="fa fa-close"></i>
-            </button>
-            
-
             <label for="task_repetition">Repetition:</label>
             <select name="task_repetition" id="task_repetition">
                 <option value="1">Once</option>
@@ -50,6 +43,13 @@
                 <option value="6">Monthly</option>
                 <option value="7">Yearly</option>
             </select>
+
+            <label for="due_date">Due date:</label>
+            <input type="date" name="due_date" id="due_date" defaultValue={currentDate}>
+            <button id="reset_date" onclick="addScreen.resetDate()">
+                <i class="fa fa-close"></i>
+            </button>
+            
             
             <button id="cancel_new_task_button" class="finish">Cancel <i class="fa fa-close"></i> </button>
             <button id="save_new_task_button" class="finish">Add<i class="fa fa-check"></i></button>

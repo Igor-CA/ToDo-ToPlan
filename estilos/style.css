@@ -85,6 +85,9 @@ main > ul > li {
 main > ul > label {
     margin: 0px;
 }
+main > ul > li > input{
+    margin:5px;
+}
 
 main > ul > li.done{
     background-color: var(--cor003);
