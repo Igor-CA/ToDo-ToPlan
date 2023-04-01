@@ -38,16 +38,15 @@ body.background-mask:before {
  }
  
 
-header > menu > ul{
+.category-holder{
     padding: 10px;
     background-color: var(--cor005);
     text-decoration: none;
     white-space: nowrap;
     overflow-x: auto;
 }
-.category{
+.category-holder__selector{
     padding: 10px;
-    height: 21px;
     margin: 0px 5px;
     border-radius: 21px;
     min-width: 50px;
@@ -60,7 +59,7 @@ header > menu > ul{
     box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.41);
 }
 
-.category.selected{
+.category-holder__selector--active{
     background-color: var(--cor005);
     color: white;
 }
@@ -71,36 +70,50 @@ main > h1{
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.414);
 }
 
-main > ul > li {
-    height: 50px;
-    line-height: 50px;
+.task{
     border-radius: 5px;
-    margin: 5px;
-    padding: 5px 5px;
+    margin: 10px;
+    padding: 10px 5px;
     color: var(--cor005);
     font-weight: bold;
     box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.426);
+    background-color: var(--cor001);
+    text-align: justify;
+}
+.task--done{
+    background-color: var(--cor003);
+    text-decoration: line-through;
 }
 
-main > ul > label {
+.task__label{
     margin: 0px;
+    line-height: 30px;
+    word-wrap: break-word;
 }
-main > ul > li > input{
+.task__checkbox{
+    align-self: start;
     margin:5px;
 }
-
-main > ul > li.done{
-    background-color: var(--cor003);
+.task__icon{
+    font-size: 1.6em;
+    height: 30px;
+    margin: 0px 5px;
+    border: none;
+    background-color: #00000000;
+    color: var(--cor005);
 }
-main > ul > li.done label{
-    text-decoration: line-through;
-    background-color: var(--cor003);
+.task__icon:active{ 
+    color: var(--cor003);
 }
-main > ul > li.undone{
-    background-color: var(--cor001);
+.task__delete{
+    position: absolute;
+    right: 35px;
+    translate: -50%;
 }
-main > ul > li.undone label{
-    text-decoration: none;
+.task__edit{
+    position: absolute;
+    right: 5px;
+    translate: -50%;
 }
 
 

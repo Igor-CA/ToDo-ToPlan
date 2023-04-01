@@ -3,7 +3,24 @@ function getCurrentDate(){
     let isoDate = currentDate.toISOString().slice(0,10);
     return isoDate
 }
-
+function elementsOverlap() {
+    let icon = document.querySelectorAll('.task__delete')
+    let text = document.querySelectorAll('.task__label')
+    for(let i=0; i<icon.length; i++){
+        const domRect1 = icon[i].getBoundingClientRect();
+        const domRect2 = text[i].getBoundingClientRect();
+    
+        if(
+        !(domRect1.top > domRect2.bottom ||
+        domRect1.right < domRect2.left ||
+        domRect1.bottom < domRect2.top ||
+        domRect1.left > domRect2.right)
+        ){
+            console.log(`${i} is intersecting`)
+        };
+    }
+        
+  }
 
 const Task = (id, values) => {
     let name = values.name;
@@ -21,7 +38,8 @@ const Task = (id, values) => {
     
     const toggleStatus = () => {
         status = (status === 'undone')? 'done':'undone' ;
-        listItem.classList = status;
+        if(status === 'done'){ listItem.classList.add('task--done') }
+        else {listItem.classList.remove('task--done') }
         saveTask()
     }
 
@@ -39,16 +57,20 @@ const Task = (id, values) => {
     }
 
     const generateHTML = () =>{
-        listItem.classList = status
+        listItem.classList = 'task'
         checkbox.type = 'checkbox'
         checkbox.id = `task-${taskId}`
+        checkbox.classList = 'task__checkbox'
         
         if(status === 'done'){ checkbox.checked = true}
 
         checkboxLabel.htmlFor = `task-${taskId}`
         checkboxLabel.innerHTML = `${name}`
+        checkboxLabel.classList = 'task__label'
         deleteInput.innerHTML = '<i class="fa fa-trash-o" aria-hidden="true"></i>'
+        deleteInput.classList = 'task__icon task__delete'
         editInput.innerHTML = '<i class="fa fa-pencil" aria-hidden="true"></i>'
+        editInput.classList = 'task__icon task__edit'
         listItem.appendChild(checkbox)
         listItem.appendChild(checkboxLabel)
         listItem.appendChild(deleteInput)
@@ -183,7 +205,7 @@ const Category = (categoryName) => {
 
     let name = categoryName
     let elementHTML = document.createElement('li')
-    elementHTML.classList = 'category' 
+    elementHTML.classList = 'category-holder__selector' 
     elementHTML.innerHTML = name
 
     elementHTML.addEventListener('click', () => {
@@ -229,10 +251,10 @@ const categoryManagger = (() => {
         categoryIndicator.textContent = selectedCategory
         categorysList.forEach((category) => {
             
-            category.elementHTML.classList.remove('selected')
+            category.elementHTML.classList.remove('category-holder__selector--active')
             
             if(category.name === selectedCategory) 
-                category.elementHTML.classList.add('selected')
+                category.elementHTML.classList.add('category-holder__selector--active')
         
         })
         taskMannager.showTasksFromCategory(selectedCategory)

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,23 +10,25 @@
     <link rel="stylesheet" href="estilos/style.css">
 </head>
 <body>
-    <header>
-        <menu>
-            <ul id="categorys">
-            </ul>
-        </menu>
-    </header>
+    
+    <menu>
+        <ul id="categorys" class="category-holder"></ul>
+    </menu>
     <main>
         <h1 id="category-indicator">Category</h1>
-        <ul id="todo-list">
+        <ul id="todo-list" class="task-list">
+            <li class="task">
+                <input type="checkbox" id="test" class="task__checkbox">
+                <label for="test" class="task__label">Lorem ipsum dolor sit amet consectetur adipisicing elit. Non aliquam fugiat nisi ratione molestiae iure saepe dolorem atque! Iusto incidunt sit veniam debitis quasi, veritatis autem aut voluptatem reiciendis quo!</label>
+                <button class="task__icon task__delete"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                <button class="task__icon task__edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+            </li>
         </ul>
         
 
         <input id="add" type="button" value="+">
-        
         <section id="add_task_screen" class="invisible">     
-            <input type="text" name="new_task_name" id="new_task_name" placeholder="Input new task here" autocomplete="off">
-            <label for="add_text"></label>
+            <input type="text" id="new_task_name" placeholder="Input new task here" autocomplete="off">
             
             <label for="category_input">Category:</label>
             <input type="text" name="category_input" id="category_input" list="categorys_list" autocomplete="off">
