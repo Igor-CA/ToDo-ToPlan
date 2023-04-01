@@ -14,7 +14,7 @@
 *{
     margin: 0px;
     padding: 0px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: cursive;
 }
 
 body, html{
@@ -80,6 +80,10 @@ main > h1{
     background-color: var(--cor001);
     text-align: justify;
 }
+
+.task__main-body{
+    display: flex;
+}
 .task--done{
     background-color: var(--cor003);
     text-decoration: line-through;
@@ -90,14 +94,19 @@ main > h1{
     line-height: 30px;
     word-wrap: break-word;
 }
+.task__checkbox-container{
+    margin: 0px 10px;
+    flex-grow: 2;
+}
 .task__checkbox{
     align-self: start;
-    margin:5px;
+    margin: 0px 10px 0px 0px;
 }
 .task__icon{
+    align-self: center;
     font-size: 1.6em;
     height: 30px;
-    margin: 0px 5px;
+    margin: 0px 10px;
     border: none;
     background-color: #00000000;
     color: var(--cor005);
@@ -105,16 +114,19 @@ main > h1{
 .task__icon:active{ 
     color: var(--cor003);
 }
-.task__delete{
-    position: absolute;
-    right: 35px;
-    translate: -50%;
+.task__options-container{
+    display: flex;
+    justify-content: space-evenly;
+}
+.task__options-container--invisible{
+    display: none;
+}
+/* .task__delete{
+    display: none;
 }
 .task__edit{
-    position: absolute;
-    right: 5px;
-    translate: -50%;
-}
+    display: none;
+} */
 
 
 input#add{

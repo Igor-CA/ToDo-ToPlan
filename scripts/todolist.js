@@ -3,25 +3,12 @@ function getCurrentDate(){
     let isoDate = currentDate.toISOString().slice(0,10);
     return isoDate
 }
-function elementsOverlap() {
-    let icon = document.querySelectorAll('.task__delete')
-    let text = document.querySelectorAll('.task__label')
-    for(let i=0; i<icon.length; i++){
-        const domRect1 = icon[i].getBoundingClientRect();
-        const domRect2 = text[i].getBoundingClientRect();
-    
-        if(
-        !(domRect1.top > domRect2.bottom ||
-        domRect1.right < domRect2.left ||
-        domRect1.bottom < domRect2.top ||
-        domRect1.left > domRect2.right)
-        ){
-            console.log(`${i} is intersecting`)
-        };
-    }
-        
-  }
+function firstLetterToUpperCase(string){
+    let newString = string.charAt(0).toUpperCase() + string.slice(1);
+    return newString
+}
 
+//TODO: Change how we generate HTML for task so it's easyer to read and modify
 const Task = (id, values) => {
     let name = values.name;
     let taskId = id;
@@ -33,6 +20,10 @@ const Task = (id, values) => {
     let listItem = document.createElement('li')
     let checkbox = document.createElement('input')
     let checkboxLabel = document.createElement('label')
+    let checkboxContainer = document.createElement('div')
+    let mainBody = document.createElement('div')
+    let optionsContainer = document.createElement('div')
+    let moreOptionsInput = document.createElement('button')
     let deleteInput = document.createElement('button')
     let editInput = document.createElement('button')
     
@@ -51,6 +42,9 @@ const Task = (id, values) => {
     editInput.addEventListener('click', () => {
         taskPropertiesScreen.edit(getTaskProperties())
     })
+    listItem.addEventListener('click', ()=> {
+        optionsContainer.classList.toggle('task__options-container--invisible')
+    })
 
     const getNodeHTML = () => {
         return listItem
@@ -67,14 +61,23 @@ const Task = (id, values) => {
         checkboxLabel.htmlFor = `task-${taskId}`
         checkboxLabel.innerHTML = `${name}`
         checkboxLabel.classList = 'task__label'
+        moreOptionsInput.innerHTML = '<i class="fa fa-angle-down" aria-hidden="true"></i>'
+        moreOptionsInput.classList = 'task__icon task__options-icon'
         deleteInput.innerHTML = '<i class="fa fa-trash-o" aria-hidden="true"></i>'
         deleteInput.classList = 'task__icon task__delete'
         editInput.innerHTML = '<i class="fa fa-pencil" aria-hidden="true"></i>'
         editInput.classList = 'task__icon task__edit'
-        listItem.appendChild(checkbox)
-        listItem.appendChild(checkboxLabel)
-        listItem.appendChild(deleteInput)
-        listItem.appendChild(editInput)
+        mainBody.classList = 'task__main-body'
+        optionsContainer.classList = 'task__options-container task__options-container--invisible'
+        checkboxContainer.classList = 'task__checkbox-container'
+        checkboxContainer.appendChild(checkbox)
+        checkboxContainer.appendChild(checkboxLabel)
+        mainBody.appendChild(checkboxContainer)
+        mainBody.appendChild(moreOptionsInput)
+        optionsContainer.appendChild(deleteInput)
+        optionsContainer.appendChild(editInput)
+        listItem.appendChild(mainBody)
+        listItem.appendChild(optionsContainer)
     };
 
     const getTaskProperties = () => {
@@ -318,9 +321,11 @@ const taskPropertiesScreen = (() => {
     }
 
     const returnScreenInputValues = () => {
-        let name = nameInput.value
+        let name = firstLetterToUpperCase(nameInput.value)
         let dueDate = (dateInput.value !== '')? dateInput.value: getCurrentDate()
-        let category = (categoryInput.value !== '')? categoryInput.value: 'No category'
+        let category = (categoryInput.value !== '')
+                            ?firstLetterToUpperCase(categoryInput.value)
+                            :'No category'
         let repetition = repetitionInput.value
         let status = 'undone'
         return {name, category, dueDate, repetition, status}
