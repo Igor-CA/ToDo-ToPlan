@@ -44,8 +44,9 @@ const Task = (id, values) => {
     editInput.addEventListener('click', () => {
         taskPropertiesScreen.edit(getTaskProperties())
     })
-    mainBody.addEventListener('click', ()=> {
+    mainBody.addEventListener('click', () => {
         optionsContainer.classList.toggle('task__options-container--invisible')
+        moreOptionsIcon.classList.toggle('task__options-icon--rotate')
     })
 
     const getNodeHTML = () => {

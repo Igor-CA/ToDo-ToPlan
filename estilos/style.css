@@ -118,6 +118,13 @@ body.background-mask:before {
 .task__icon:active{ 
     color: var(--cor003);
 }
+.task__options-icon{
+    transition: 200ms;
+}
+.task__options-icon--rotate{
+    transition: 200ms;
+    transform: rotate(180deg) translateY(10%);
+}
 .task__options-container{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
