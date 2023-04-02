@@ -34,18 +34,17 @@
             </li>
         </ul>
         
+        <button id="new-task-button">+</button>
+        
+        <section id="add-task-screen" class="add-screen add-screen--invisible">
+            <input type="text" id="new-task-name" class="add-screen__name-input" placeholder="Input new task here" autocomplete="off">
 
-        <input id="add" type="button" value="+">
-        <section id="add_task_screen" class="invisible">     
-            <input type="text" id="new_task_name" placeholder="Input new task here" autocomplete="off">
-            
-            <label for="category_input">Category:</label>
-            <input type="text" name="category_input" id="category_input" list="categorys_list" autocomplete="off">
-            <datalist id="categorys_list">
-            </datalist>
+            <label for="category-input" class="add-screen__label">Category:</label>
+            <input type="text" id="category-input" list="categorys-list" autocomplete="off" class="add-screen__input">
+            <datalist id="categorys-list"></datalist>
 
-            <label for="task_repetition">Repetition:</label>
-            <select name="task_repetition" id="task_repetition">
+            <label for="task-repetition" class="add-screen__label">Repetition:</label>
+            <select name="task-repetition" id="task-repetition" class="add-screen__input">
                 <option value="1">Once</option>
                 <option value="2">Continuous</option>
                 <option value="3">Hourly</option>
@@ -55,16 +54,18 @@
                 <option value="7">Yearly</option>
             </select>
 
-            <label for="due_date">Due date:</label>
-            <input type="date" name="due_date" id="due_date" defaultValue={currentDate}>
-            <button id="reset_date" onclick="addScreen.resetDate()">
-                <i class="fa fa-close"></i>
-            </button>
-            
-            
-            <button id="cancel_new_task_button" class="finish">Cancel <i class="fa fa-close"></i> </button>
-            <button id="add_new_task_button" class="finish">Add<i class="fa fa-check"></i></button>
-            <button id="save_new_task_button" class="finish invisible">Save<i class="fa fa-check"></i></button>
+            <label for="due-date" class="add-screen__label">Due date:</label>
+            <div class="add-screen__flex-container">
+                <input type="date" id="due-date" class="add-screen__input add-screen__date-input">
+                <i class="fa fa-close add-screen__reset-date" id="reset-date""></i>
+            </div>
+
+            <div class="add-screen__flex-container">
+                <button id="cancel-new-task-button" class="add-screen__close-icons">Cancel <i class="fa fa-close"></i> </button>
+                <button id="add-new-task-button" class="add-screen__close-icons">Add<i class="fa fa-check"></i></button>
+                <button id="save-new-task-button" class="add-screen__close-icons add-screen__close-icons--invisible">Save<i class="fa fa-check"></i></button>
+            </div>
+
         </section>
         
         <script src="scripts/todolist.js"></script>

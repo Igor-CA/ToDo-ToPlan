@@ -26,6 +26,8 @@ const Task = (id, values) => {
     let moreOptionsIcon = document.createElement('i')
     let deleteInput = document.createElement('button')
     let editInput = document.createElement('button')
+    let dueDateIndicator = document.createElement('div')
+    let dueDateContainer = document.createElement('div')
     
     const toggleStatus = () => {
         status = (status === 'undone')? 'done':'undone' ;
@@ -42,7 +44,7 @@ const Task = (id, values) => {
     editInput.addEventListener('click', () => {
         taskPropertiesScreen.edit(getTaskProperties())
     })
-    listItem.addEventListener('click', ()=> {
+    mainBody.addEventListener('click', ()=> {
         optionsContainer.classList.toggle('task__options-container--invisible')
     })
 
@@ -56,7 +58,10 @@ const Task = (id, values) => {
         checkbox.id = `task-${taskId}`
         checkbox.classList = 'task__checkbox'
         
-        if(status === 'done'){ checkbox.checked = true}
+        if(status === 'done'){ 
+            checkbox.checked = true
+            listItem.classList.add('task--done')
+        }
 
         checkboxLabel.htmlFor = `task-${taskId}`
         checkboxLabel.innerHTML = `${name}`
@@ -69,10 +74,14 @@ const Task = (id, values) => {
         mainBody.classList = 'task__main-body'
         optionsContainer.classList = 'task__options-container task__options-container--invisible'
         checkboxContainer.classList = 'task__checkbox-container'
+        dueDateIndicator.innerHTML = dueDate.replaceAll('-', '/')
+        dueDateIndicator.classList = 'task__due-date'
+        dueDateContainer.appendChild(dueDateIndicator)
         checkboxContainer.appendChild(checkbox)
         checkboxContainer.appendChild(checkboxLabel)
         mainBody.appendChild(checkboxContainer)
         mainBody.appendChild(moreOptionsIcon)
+        optionsContainer.appendChild(dueDateIndicator)
         optionsContainer.appendChild(deleteInput)
         optionsContainer.appendChild(editInput)
         listItem.appendChild(mainBody)
@@ -215,8 +224,9 @@ const Category = (categoryName) => {
     })
 
     const addToDataList = (() => {
-        let dataList = document.querySelector('#categorys_list')
+        let dataList = document.querySelector('#categorys-list')
         let option = document.createElement('option')
+        if(name !== 'All' && name !== 'Today')
         option.value = name
         dataList.appendChild(option)
     })();
@@ -272,40 +282,40 @@ const categoryManagger = (() => {
 
 const taskPropertiesScreen = (() => {
 
-    let screenContainer = document.querySelector('#add_task_screen')
-    let nameInput = document.querySelector('#new_task_name')
-    let categoryInput = document.querySelector('#category_input')
-    let dateInput = document.querySelector('#due_date')
-    let repetitionInput = document.querySelector('#task_repetition')
-    let addBtn = document.querySelector("#add")
-    let saveNewTaskBtn = document.querySelector("#add_new_task_button")
-    let saveEditBtn = document.querySelector("#save_new_task_button")
-    let cancelBtn = document.querySelector('#cancel_new_task_button')
-    let resetDateBtn = document.querySelector('#reset_date')
+    let screenContainer = document.querySelector('#add-task-screen')
+    let nameInput = document.querySelector('#new-task-name')
+    let categoryInput = document.querySelector('#category-input')
+    let dateInput = document.querySelector('#due-date')
+    let repetitionInput = document.querySelector('#task-repetition')
+    let addBtn = document.querySelector("#new-task-button")
+    let saveNewTaskBtn = document.querySelector("#add-new-task-button")
+    let saveEditBtn = document.querySelector("#save-new-task-button")
+    let cancelBtn = document.querySelector('#cancel-new-task-button')
+    let resetDateBtn = document.querySelector('#reset-date')
     let editedTaskId = null
 
     const show = () => {
         document.body.classList.toggle('background-mask')
-        screenContainer.classList.toggle('invisible')   
+        screenContainer.classList.remove('add-screen--invisible')   
         resetInputValues()
         nameInput.focus()
     }
     const showAddScreen = () => {
         show()
-        saveEditBtn.classList.add('invisible')
-        saveNewTaskBtn.classList.remove('invisible')
+        saveEditBtn.classList.add('add-screen__close-icons--invisible')
+        saveNewTaskBtn.classList.remove('add-screen__close-icons--invisible')
     }
     const showEditScreen = () => {
         show()
-        saveEditBtn.classList.remove('invisible')
-        saveNewTaskBtn.classList.add('invisible')
+        saveEditBtn.classList.remove('add-screen__close-icons--invisible')
+        saveNewTaskBtn.classList.add('add-screen__close-icons--invisible')
     }
 
     addBtn.addEventListener("click", showAddScreen)
 
     const hide = () => {
         document.body.classList.toggle('background-mask')
-        screenContainer.classList.toggle('invisible') 
+        screenContainer.classList.add('add-screen--invisible') 
     }
 
     cancelBtn.addEventListener('click', hide)

@@ -65,7 +65,7 @@ body.background-mask:before {
     color: white;
 }
 
-main > h1{
+#category-indicator{
     margin: 10px;
     color: white;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.414);
@@ -87,7 +87,6 @@ main > h1{
 }
 .task--done{
     background-color: var(--cor003);
-    text-decoration: line-through;
 }
 
 .task__label{
@@ -95,6 +94,10 @@ main > h1{
     line-height: 30px;
     word-wrap: break-word;
 }
+.task--done .task__label{
+    text-decoration: line-through;
+}
+
 .task__checkbox-container{
     margin: 0px 10px;
     flex-grow: 2;
@@ -135,6 +138,7 @@ main > h1{
 }
 
 .task__delete, .task__edit{
+    justify-self: stretch;
 }
 .task__due-date--late{
     color: red;
@@ -146,7 +150,7 @@ main > h1{
 }
 
 
-input#add{
+#new-task-button{
     position: fixed;
     bottom: 10px;
     right: 10px;
@@ -154,84 +158,94 @@ input#add{
     border-radius: 25px;
     width: 50px;
     height: 50px;
-    padding: 10px;
-    line-height: 30px;
+    line-height: 50%;
     font-size: 3em;
     color: var(--cor005);
     background-color: var(--cor001);
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.456);
     transition: background-color 0.2s;
 }
-input#add:hover{
+#new-task-button:hover{
     cursor: pointer;
 }
-input#add:active{
+#new-task-button:active{
     background-color: var(--cor002);
 }
 
 
 
-main > section#add_task_screen{
+.add-screen{
+    max-width: 80vw;
+    display: flex;
+    flex-direction: column;
     position: absolute;
     z-index: 2;
     top: 50%;
     left: 50%;
-    width: 350px;
-    height: 280px;
     border-radius: 10px;
     background-color: var(--cor001);
     transform: translate(-50%, -50%);
+    font-size: 1em;
 }
-main > section#add_task_screen > input#new_task_name{
-    display: block;
-    width: 300px;
-    height: 40px;
-    margin: auto;
-    color: var(--cor005);
-    margin-top: 15px;
-    border-radius: 10px;
-    border: none;
-    font-size: 1.5em;
+.add-screen--invisible{
+    display: none;
+}
+.add-screen__name-input{
+    margin: 10px;
     padding: 10px;
+    color: var(--cor005);
+    border-radius: 5px;
+    font-size: 1.5em;
     box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.396);
+    border: none;
     outline: none;
 }
 
-main >section#add_task_screen > input[type ='date'], 
-main >section#add_task_screen > select,
-main >section#add_task_screen > input#category_input{
-    margin-left: 15px; 
+.add-screen__input{
+    margin: 10px 15px; 
     color: var(--cor005);
-    display: inline-block;
-    background-color: var(--cor001);
+    background-color: #00000000;
     border: none;
     border-bottom: 1px solid var(--cor005);
-    height: 20px;
-    width: 280px;
     outline: none;
+    font-size: 1em;
 }
 
-main >section#add_task_screen > label{
+.add-screen__label{
+    margin: 0px 15px;
     color: var(--cor005);
-    margin-left: 15px;
-    margin-top: 10px;
     display: block;
     background-color: var(--cor001);
     border: none;
+    font-size: 1em;
 }
-main >section#add_task_screen > button.finish{
+.add-screen__flex-container{
+    display: flex;
+    align-items: center;
+}
+.add-screen__date-input{
+    margin: 0px 0px 0px 15px;
+    flex-grow: 1;
+}
+.add-screen__reset-date{
+    color: var(--cor005);
+    margin: 0px 15px;
     padding: 10px;
-    margin-top: 10px;
-    margin-left: 15px;
-    width: 150px;
+    cursor: pointer;
+    /* font-size: 1em; */
+}
+.add-screen__close-icons{
+    padding: 10px;
+    margin: 10px;
     color: var(--cor005);
     background-color: var(--cor001);
     cursor: pointer;
-    box-sizing: border-box;
     border: none;
     outline: none;
+    flex-grow: 1;
+    font-size: 1em;
 }
-main >section#add_task_screen > button#reset_date{
+/* .add-screen__reset-date{
     margin-left: 10px;
     padding: 0px;
     font-size: 20px;
@@ -239,8 +253,8 @@ main >section#add_task_screen > button#reset_date{
     color: var(--cor005);
     border: none;
     cursor: pointer;
-}
+} */
 
-.invisible{
+.add-screen__close-icons--invisible{
     display: none;
 }
