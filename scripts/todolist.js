@@ -23,7 +23,7 @@ const Task = (id, values) => {
     let checkboxContainer = document.createElement('div')
     let mainBody = document.createElement('div')
     let optionsContainer = document.createElement('div')
-    let moreOptionsInput = document.createElement('button')
+    let moreOptionsIcon = document.createElement('i')
     let deleteInput = document.createElement('button')
     let editInput = document.createElement('button')
     
@@ -61,8 +61,7 @@ const Task = (id, values) => {
         checkboxLabel.htmlFor = `task-${taskId}`
         checkboxLabel.innerHTML = `${name}`
         checkboxLabel.classList = 'task__label'
-        moreOptionsInput.innerHTML = '<i class="fa fa-angle-down" aria-hidden="true"></i>'
-        moreOptionsInput.classList = 'task__icon task__options-icon'
+        moreOptionsIcon.classList = 'fa fa-angle-down task__icon task__options-icon'
         deleteInput.innerHTML = '<i class="fa fa-trash-o" aria-hidden="true"></i>'
         deleteInput.classList = 'task__icon task__delete'
         editInput.innerHTML = '<i class="fa fa-pencil" aria-hidden="true"></i>'
@@ -73,7 +72,7 @@ const Task = (id, values) => {
         checkboxContainer.appendChild(checkbox)
         checkboxContainer.appendChild(checkboxLabel)
         mainBody.appendChild(checkboxContainer)
-        mainBody.appendChild(moreOptionsInput)
+        mainBody.appendChild(moreOptionsIcon)
         optionsContainer.appendChild(deleteInput)
         optionsContainer.appendChild(editInput)
         listItem.appendChild(mainBody)
