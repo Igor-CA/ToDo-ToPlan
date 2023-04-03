@@ -108,6 +108,7 @@ body.background-mask:before {
 }
 .task__icon{
     align-self: center;
+    text-align: center;
     font-size: 1.6em;
     height: 30px;
     margin: 0px 10px;

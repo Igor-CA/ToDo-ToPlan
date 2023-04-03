@@ -8,7 +8,6 @@ function firstLetterToUpperCase(string){
     return newString
 }
 
-//TODO: Change how we generate HTML for task so it's easyer to read and modify
 const Task = (id, values) => {
     let name = values.name;
     let taskId = id;
@@ -17,31 +16,31 @@ const Task = (id, values) => {
     let category = values.category;
     let status = values.status;
     
-    let listItem = document.createElement('li')
-    let checkbox = document.createElement('input')
-    let checkboxLabel = document.createElement('label')
-    let checkboxContainer = document.createElement('div')
-    let mainBody = document.createElement('div')
-    let optionsContainer = document.createElement('div')
-    let moreOptionsIcon = document.createElement('i')
-    let deleteInput = document.createElement('button')
-    let editInput = document.createElement('button')
-    let dueDateIndicator = document.createElement('div')
-    let dueDateContainer = document.createElement('div')
+    //It's this way to show how one element is related to one another
+    let ItemHTML = document.createElement('li')
+        let mainBody = document.createElement('div')
+            let checkboxContainer = document.createElement('div')
+                let checkbox = document.createElement('input')
+                let checkboxLabel = document.createElement('label')
+            let moreOptionsIcon = document.createElement('i')
+        let optionsContainer = document.createElement('div')
+            let dueDateIndicator = document.createElement('div')
+            let deleteIcon = document.createElement('i')
+            let editIcon = document.createElement('i')
     
     const toggleStatus = () => {
         status = (status === 'undone')? 'done':'undone' ;
-        if(status === 'done'){ listItem.classList.add('task--done') }
-        else {listItem.classList.remove('task--done') }
+        if(status === 'done'){ ItemHTML.classList.add('task--done') }
+        else {ItemHTML.classList.remove('task--done') }
         saveTask()
     }
 
     checkbox.addEventListener('click', toggleStatus)
     
-    deleteInput.addEventListener('click', () => {
+    deleteIcon.addEventListener('click', () => {
         taskMannager.deleteTask(taskId)
     })
-    editInput.addEventListener('click', () => {
+    editIcon.addEventListener('click', () => {
         taskPropertiesScreen.edit(getTaskProperties())
     })
     mainBody.addEventListener('click', () => {
@@ -50,43 +49,48 @@ const Task = (id, values) => {
     })
 
     const getNodeHTML = () => {
-        return listItem
+        return ItemHTML
     }
 
     const generateHTML = () =>{
-        listItem.classList = 'task'
-        checkbox.type = 'checkbox'
-        checkbox.id = `task-${taskId}`
-        checkbox.classList = 'task__checkbox'
+        ItemHTML.classList = 'task'
         
+        mainBody.classList = 'task__main-body'
+        checkboxContainer.classList = 'task__checkbox-container'
+        checkbox.classList = 'task__checkbox'
+        checkboxLabel.classList = 'task__label'
+        moreOptionsIcon.classList = 'task__icon task__options-icon fa fa-angle-down '
+        optionsContainer.classList = 'task__options-container task__options-container--invisible'
+        dueDateIndicator.classList = 'task__due-date'
+        deleteIcon.classList = 'task__icon task__delete fa fa-trash-o '
+        editIcon.classList = 'task__icon task__edit fa fa-pencil '
+
+
+        checkbox.type = 'checkbox'
         if(status === 'done'){ 
             checkbox.checked = true
-            listItem.classList.add('task--done')
+            ItemHTML.classList.add('task--done')
         }
-
+        
+        checkbox.id = `task-${taskId}`
         checkboxLabel.htmlFor = `task-${taskId}`
-        checkboxLabel.innerHTML = `${name}`
-        checkboxLabel.classList = 'task__label'
-        moreOptionsIcon.classList = 'fa fa-angle-down task__icon task__options-icon'
-        deleteInput.innerHTML = '<i class="fa fa-trash-o" aria-hidden="true"></i>'
-        deleteInput.classList = 'task__icon task__delete'
-        editInput.innerHTML = '<i class="fa fa-pencil" aria-hidden="true"></i>'
-        editInput.classList = 'task__icon task__edit'
-        mainBody.classList = 'task__main-body'
-        optionsContainer.classList = 'task__options-container task__options-container--invisible'
-        checkboxContainer.classList = 'task__checkbox-container'
+        checkboxLabel.innerHTML = name
+        
+        
         dueDateIndicator.innerHTML = dueDate.replaceAll('-', '/')
-        dueDateIndicator.classList = 'task__due-date'
-        dueDateContainer.appendChild(dueDateIndicator)
+        
         checkboxContainer.appendChild(checkbox)
         checkboxContainer.appendChild(checkboxLabel)
+
         mainBody.appendChild(checkboxContainer)
         mainBody.appendChild(moreOptionsIcon)
+        
         optionsContainer.appendChild(dueDateIndicator)
-        optionsContainer.appendChild(deleteInput)
-        optionsContainer.appendChild(editInput)
-        listItem.appendChild(mainBody)
-        listItem.appendChild(optionsContainer)
+        optionsContainer.appendChild(deleteIcon)
+        optionsContainer.appendChild(editIcon)
+        
+        ItemHTML.appendChild(mainBody)
+        ItemHTML.appendChild(optionsContainer)
     };
 
     const getTaskProperties = () => {
