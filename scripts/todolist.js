@@ -3,7 +3,10 @@ function getCurrentDate(){
     let isoDate = currentDate.toISOString().slice(0,10);
     return isoDate
 }
-
+function firstLetterToUpperCase(string){
+    let newString = string.charAt(0).toUpperCase() + string.slice(1);
+    return newString
+}
 
 const Task = (id, values) => {
     let name = values.name;
@@ -13,46 +16,81 @@ const Task = (id, values) => {
     let category = values.category;
     let status = values.status;
     
-    let listItem = document.createElement('li')
-    let checkbox = document.createElement('input')
-    let checkboxLabel = document.createElement('label')
-    let deleteInput = document.createElement('button')
-    let editInput = document.createElement('button')
+    //It's this way to show how one element is related to one another
+    let ItemHTML = document.createElement('li')
+        let mainBody = document.createElement('div')
+            let checkboxContainer = document.createElement('div')
+                let checkbox = document.createElement('input')
+                let checkboxLabel = document.createElement('label')
+            let moreOptionsIcon = document.createElement('i')
+        let optionsContainer = document.createElement('div')
+            let dueDateIndicator = document.createElement('div')
+            let deleteIcon = document.createElement('i')
+            let editIcon = document.createElement('i')
     
     const toggleStatus = () => {
         status = (status === 'undone')? 'done':'undone' ;
-        listItem.classList = status;
+        if(status === 'done'){ ItemHTML.classList.add('task--done') }
+        else {ItemHTML.classList.remove('task--done') }
         saveTask()
     }
 
     checkbox.addEventListener('click', toggleStatus)
     
-    deleteInput.addEventListener('click', () => {
+    deleteIcon.addEventListener('click', () => {
         taskMannager.deleteTask(taskId)
     })
-    editInput.addEventListener('click', () => {
+    editIcon.addEventListener('click', () => {
         taskPropertiesScreen.edit(getTaskProperties())
+    })
+    mainBody.addEventListener('click', () => {
+        optionsContainer.classList.toggle('task__options-container--invisible')
+        moreOptionsIcon.classList.toggle('task__options-icon--rotate')
     })
 
     const getNodeHTML = () => {
-        return listItem
+        return ItemHTML
     }
 
     const generateHTML = () =>{
-        listItem.classList = status
-        checkbox.type = 'checkbox'
-        checkbox.id = `task-${taskId}`
+        ItemHTML.classList = 'task'
         
-        if(status === 'done'){ checkbox.checked = true}
+        mainBody.classList = 'task__main-body'
+        checkboxContainer.classList = 'task__checkbox-container'
+        checkbox.classList = 'task__checkbox'
+        checkboxLabel.classList = 'task__label'
+        moreOptionsIcon.classList = 'task__icon task__options-icon fa fa-angle-down '
+        optionsContainer.classList = 'task__options-container task__options-container--invisible'
+        dueDateIndicator.classList = 'task__due-date'
+        deleteIcon.classList = 'task__icon task__delete fa fa-trash-o '
+        editIcon.classList = 'task__icon task__edit fa fa-pencil '
 
+
+        checkbox.type = 'checkbox'
+        if(status === 'done'){ 
+            checkbox.checked = true
+            ItemHTML.classList.add('task--done')
+        }
+        
+        checkbox.id = `task-${taskId}`
         checkboxLabel.htmlFor = `task-${taskId}`
-        checkboxLabel.innerHTML = `${name}`
-        deleteInput.innerHTML = '<i class="fa fa-trash-o" aria-hidden="true"></i>'
-        editInput.innerHTML = '<i class="fa fa-pencil" aria-hidden="true"></i>'
-        listItem.appendChild(checkbox)
-        listItem.appendChild(checkboxLabel)
-        listItem.appendChild(deleteInput)
-        listItem.appendChild(editInput)
+        checkboxLabel.innerHTML = name
+        
+        
+        dueDateIndicator.innerHTML = dueDate.replaceAll('-', '/')
+        
+        checkboxContainer.appendChild(checkbox)
+        checkboxContainer.appendChild(checkboxLabel)
+
+        mainBody.appendChild(checkboxContainer)
+        mainBody.appendChild(moreOptionsIcon)
+        
+        optionsContainer.appendChild(dueDateIndicator)
+        optionsContainer.appendChild(deleteIcon)
+        optionsContainer.appendChild(editIcon)
+        
+        ItemHTML.appendChild(mainBody)
+        ItemHTML.appendChild(optionsContainer)
     };
 
     const getTaskProperties = () => {
@@ -183,7 +221,7 @@ const Category = (categoryName) => {
 
     let name = categoryName
     let elementHTML = document.createElement('li')
-    elementHTML.classList = 'category' 
+    elementHTML.classList = 'category-holder__selector' 
     elementHTML.innerHTML = name
 
     elementHTML.addEventListener('click', () => {
@@ -191,8 +229,9 @@ const Category = (categoryName) => {
     })
 
     const addToDataList = (() => {
-        let dataList = document.querySelector('#categorys_list')
+        let dataList = document.querySelector('#categorys-list')
         let option = document.createElement('option')
+        if(name !== 'All' && name !== 'Today')
         option.value = name
         dataList.appendChild(option)
     })();
@@ -229,10 +268,10 @@ const categoryManagger = (() => {
         categoryIndicator.textContent = selectedCategory
         categorysList.forEach((category) => {
             
-            category.elementHTML.classList.remove('selected')
+            category.elementHTML.classList.remove('category-holder__selector--active')
             
             if(category.name === selectedCategory) 
-                category.elementHTML.classList.add('selected')
+                category.elementHTML.classList.add('category-holder__selector--active')
         
         })
         taskMannager.showTasksFromCategory(selectedCategory)
@@ -248,40 +287,40 @@ const categoryManagger = (() => {
 
 const taskPropertiesScreen = (() => {
 
-    let screenContainer = document.querySelector('#add_task_screen')
-    let nameInput = document.querySelector('#new_task_name')
-    let categoryInput = document.querySelector('#category_input')
-    let dateInput = document.querySelector('#due_date')
-    let repetitionInput = document.querySelector('#task_repetition')
-    let addBtn = document.querySelector("#add")
-    let saveNewTaskBtn = document.querySelector("#add_new_task_button")
-    let saveEditBtn = document.querySelector("#save_new_task_button")
-    let cancelBtn = document.querySelector('#cancel_new_task_button')
-    let resetDateBtn = document.querySelector('#reset_date')
+    let screenContainer = document.querySelector('#add-task-screen')
+    let nameInput = document.querySelector('#new-task-name')
+    let categoryInput = document.querySelector('#category-input')
+    let dateInput = document.querySelector('#due-date')
+    let repetitionInput = document.querySelector('#task-repetition')
+    let addBtn = document.querySelector("#new-task-button")
+    let saveNewTaskBtn = document.querySelector("#add-new-task-button")
+    let saveEditBtn = document.querySelector("#save-new-task-button")
+    let cancelBtn = document.querySelector('#cancel-new-task-button')
+    let resetDateBtn = document.querySelector('#reset-date')
     let editedTaskId = null
 
     const show = () => {
         document.body.classList.toggle('background-mask')
-        screenContainer.classList.toggle('invisible')   
+        screenContainer.classList.remove('add-screen--invisible')   
         resetInputValues()
         nameInput.focus()
     }
     const showAddScreen = () => {
         show()
-        saveEditBtn.classList.add('invisible')
-        saveNewTaskBtn.classList.remove('invisible')
+        saveEditBtn.classList.add('add-screen__close-icons--invisible')
+        saveNewTaskBtn.classList.remove('add-screen__close-icons--invisible')
     }
     const showEditScreen = () => {
         show()
-        saveEditBtn.classList.remove('invisible')
-        saveNewTaskBtn.classList.add('invisible')
+        saveEditBtn.classList.remove('add-screen__close-icons--invisible')
+        saveNewTaskBtn.classList.add('add-screen__close-icons--invisible')
     }
 
     addBtn.addEventListener("click", showAddScreen)
 
     const hide = () => {
         document.body.classList.toggle('background-mask')
-        screenContainer.classList.toggle('invisible') 
+        screenContainer.classList.add('add-screen--invisible') 
     }
 
     cancelBtn.addEventListener('click', hide)
@@ -296,9 +335,11 @@ const taskPropertiesScreen = (() => {
     }
 
     const returnScreenInputValues = () => {
-        let name = nameInput.value
+        let name = firstLetterToUpperCase(nameInput.value)
         let dueDate = (dateInput.value !== '')? dateInput.value: getCurrentDate()
-        let category = (categoryInput.value !== '')? categoryInput.value: 'No category'
+        let category = (categoryInput.value !== '')
+                            ?firstLetterToUpperCase(categoryInput.value)
+                            :'No category'
         let repetition = repetitionInput.value
         let status = 'undone'
         return {name, category, dueDate, repetition, status}
